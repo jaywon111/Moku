@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOKU ALPHA TERMINAL </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="scanline"></div>
+    <div class="max-w-4xl mx-auto p-4 md:p-8 flex flex-col gap-6">
+        
+        <header class="border-b border-cyan-900 pb-6 flex justify-between items-center">
+            <div>
+                <div class="text-[10px] text-cyan-600 tracking-[0.5em] uppercase font-bold">Moku Alpha Terminal</div>
+                <h1 class="header-font text-4xl font-black text-white tracking-tighter italic">GRAND<span class="text-pink-600">.ARENA</span></h1>
+            </div>
+            <div class="text-right pl-6">
+                <div class="text-[10px] text-gray-500 uppercase">Season 1 Pool</div>
+                <div class="text-2xl font-black text-pink-500 italic glow-pink">$1,000,000</div>
+            </div>
+        </header>
+
+        <div class="bg-black/80 border border-cyan-900 p-4 rounded shadow-2xl backdrop-blur-md">
+            <div id="terminal-output" class="text-[10px] mb-3 h-24 overflow-y-auto flex flex-col text-cyan-400 font-mono leading-relaxed">
+                <div>> SYSTEM_BOOT_COMPLETE...</div>
+                <div>> PACK_PRICES: Standard 300G | Scheme 600G</div>
+                <div>> Ready for Tactical Analysis.</div>
+            </div>
+            <div class="flex items-center text-sm border-t border-cyan-950 pt-3">
+                <span class="mr-3 text-pink-500 font-bold tracking-widest">CMD_</span>
+                <input type="text" id="cli-input" class="bg-transparent border-none outline-none w-full text-cyan-400 placeholder-cyan-900 uppercase" placeholder="enter command: status, arena, schemes, scout, clear" autocomplete="off" autofocus>
+            </div>
+        </div>
+
+        <nav class="grid grid-cols-3 gap-4">
+            <button onclick="app.navigate('arena')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all">Battle Ground</button>
+            <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all">Scheme</button>
+            <button onclick="app.navigate('scout')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">Star ranking</button>
+        </nav>
+
+        <main>
+            <section id="arena-section" class="content-section">
+                <div class="grid grid-cols-5 gap-3 mb-8" id="fighter-grid"></div>
+                <div id="battle-stage" class="hidden border border-cyan-900 p-6 bg-black/90 rounded-sm">
+                    <div class="grid grid-cols-2 gap-8 mb-8">
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-end border-b border-cyan-900 pb-2">
+                                <span id="t1-title" class="header-font text-white text-xs uppercase">UNIT_01</span>
+                                <span class="text-[9px] text-cyan-600 font-bold">ALPHA TEAM</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-[10px]"><span class="text-gray-500">SPEED</span><span id="t1-spd-val" class="stat-glow">+0</span></div>
+                                <input type="range" min="0" max="100" value="0" oninput="app.updateStats(0, 'spd', this.value, 't1-spd-val')">
+                                <div class="flex justify-between text-[10px]"><span class="text-gray-500">STRENGTH</span><span id="t1-str-val" class="stat-glow">+0</span></div>
+                                <input type="range" min="0" max="100" value="0" oninput="app.updateStats(0, 'str', this.value, 't1-str-val')">
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-end border-b border-pink-900 pb-2">
+                                <span class="text-[9px] text-pink-600 font-bold">OPPONENT</span>
+                                <span id="t2-title" class="header-font text-white text-xs uppercase">UNIT_02</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-[10px]"><span id="t2-spd-val" class="stat-glow">+0</span><span class="text-gray-500">SPEED</span></div>
+                                <input type="range" min="0" max="100" value="0" oninput="app.updateStats(1, 'spd', this.value, 't2-spd-val')">
+                                <div class="flex justify-between text-[10px]"><span id="t2-str-val" class="stat-glow">+0</span><span class="text-gray-500">STRENGTH</span></div>
+                                <input type="range" min="0" max="100" value="0" oninput="app.updateStats(1, 'str', this.value, 't2-str-val')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="app.runSimulation()" class="flex-2 w-full bg-white text-black font-black py-4 tracking-[0.4em] hover:bg-pink-600 hover:text-white transition-all uppercase text-[10px]">Execute Simulation</button>
+                        <button onclick="app.downloadReport()" class="flex-1 bg-cyan-900 text-white font-bold py-4 hover:bg-cyan-500 transition-all uppercase text-[8px]">Download Report</button>
+                    </div>
+                    <div id="simulation-result" class="hidden border border-pink-900 mt-8 p-8 text-center bg-pink-950/10">
+                        <div class="text-[10px] text-pink-500 mb-2 tracking-[0.5em] uppercase">Calculation completed</div>
+                        <div id="winner-name" class="header-font text-6xl font-black mb-2 italic"></div>
+                        <div id="win-chance" class="text-cyan-400 font-mono text-xs tracking-widest"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="schemes-section" class="content-section hidden">
+                <div class="grid gap-3" id="schemes-grid"></div>
+            </section>
+
+            <section id="scout-section" class="content-section hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-[11px] font-mono border border-cyan-900/30">
+                        <thead class="bg-cyan-950/40 text-cyan-500 uppercase text-[9px]">
+                            <tr><th class="p-4">Athlete</th><th class="p-4">Speed</th><th class="p-4">Rank</th><th class="p-4 text-right">Analysis</th></tr>
+                        </thead>
+                        <tbody id="scout-body" class="text-white"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
