@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>MOKU ALPHA TERMINAL </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
@@ -36,11 +36,11 @@
             </div>
         </div>
 
-        <nav class="grid grid-cols-3 gap-4">
-            <button onclick="app.navigate('arena')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all">Battle Ground</button>
-            <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all">Scheme</button>
-            <button onclick="app.navigate('scout')" class="border border-cyan-800 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">Star ranking</button>
-        </nav>
+       <nav class="grid grid-cols-3 gap-2 sm:gap-4">
+    <button onclick="app.navigate('arena')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all min-h-[44px]">Athlete_Lab</button>
+    <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all min-h-[44px]">Strategy_Deck</button>
+    <button onclick="app.navigate('scout')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-h-[44px]">Alpha_Scout</button>
+        </nav> 
 
         <main>
             <section id="arena-section" class="content-section">
@@ -48,10 +48,8 @@
         SELECT TWO ATHLETE CARDS BELOW TO INITIATE BATTLE SEQUENCE
         </div>
     
-    <div class="grid grid-cols-5 gap-3 mb-8" id="fighter-grid"></div>
-    <div id="battle-stage" class="hidden border border-cyan-900 p-6 bg-black/90 rounded-sm">
-                <div class="grid grid-cols-5 gap-3 mb-8" id="fighter-grid"></div>
-                <div id="battle-stage" class="hidden border border-cyan-900 p-6 bg-black/90 rounded-sm">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 sm:mb-8" id="fighter-grid"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                     <div class="grid grid-cols-2 gap-8 mb-8">
                         <div class="space-y-6">
                             <div class="flex justify-between items-end border-b border-cyan-900 pb-2">
@@ -78,21 +76,10 @@
                             </div>
                         </div>
                     </div>
-  <div class="flex flex-col sm:flex-row gap-3">
-        <button onclick="app.runSimulation()" class="group relative flex-1 bg-gradient-to-r from-pink-600 to-pink-500 text-white font-black py-4 px-6 tracking-[0.3em] hover:from-pink-500 hover:to-pink-400 transition-all duration-300 uppercase text-xs rounded-sm overflow-hidden shadow-[0_0_15px_rgba(255,0,122,0.3)]">
-           <span class="relative z-10">Execute Simulation</span>
-            <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
-         </button>
-    <button onclick="app.downloadReport()" class="group relative flex-1 bg-gradient-to-r from-cyan-900 to-cyan-800 text-cyan-300 font-black py-4 px-6 tracking-[0.2em] hover:from-cyan-800 hover:to-cyan-700 hover:text-white transition-all duration-300 uppercase text-xs rounded-sm border border-cyan-700 overflow-hidden">
-        <span class="relative z-10 flex items-center justify-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-            </svg>
-            Download Report
-        </span>
-        <div class="absolute inset-0 bg-cyan-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-    </button>
-    </div>
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-2">
+                    <button onclick="app.runSimulation()" class="w-full sm:flex-2 bg-white text-black font-black py-3 sm:py-4 tracking-[0.3em] sm:tracking-[0.4em] hover:bg-pink-600 hover:text-white transition-all uppercase text-[9px] sm:text-[10px]">Execute Simulation</button>
+                    <button onclick="app.downloadReport(event)" class="w-full sm:flex-1 bg-cyan-900 text-white font-bold py-3 sm:py-4 hover:bg-cyan-500 transition-all uppercase text-[7px] sm:text-[8px]">Download_Report</button>
+              </div>
                     <div id="simulation-result" class="hidden border border-pink-900 mt-8 p-8 text-center bg-pink-950/10">
                         <div class="text-[10px] text-pink-500 mb-2 tracking-[0.5em] uppercase">Calculation completed</div>
                         <div id="winner-name" class="header-font text-6xl font-black mb-2 italic"></div>

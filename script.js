@@ -86,53 +86,66 @@ class MokuFinal {
         setTimeout(() => winName.classList.remove('glitch-text'), 800);
     }
 
-    downloadReport() {
+    downloadReport(event) {
+    if (this.selected.length < 2) {
+        this.print("> ERROR: Select two athletes first");
+        return;
+    }
+    
     const p1 = this.mokis.find(m => m.id === this.selected[0]);
     const p2 = this.mokis.find(m => m.id === this.selected[1]);
     
-    const date = new Date().toLocaleString();
-    const winner = this.calculateWinner();
+    // Calculate winner for the report
+    const s1 = (p1.spd + this.tweaks[0].spd) * 1.5 + (p1.str + this.tweaks[0].str);
+    const s2 = (p2.spd + this.tweaks[1].spd) * 1.5 + (p2.str + this.tweaks[1].str);
+    const winner = s1 > s2 ? p1 : p2;
+    const winProb = ((Math.max(s1,s2)/(s1+s2))*100).toFixed(1);
     
-    const content = `
-╔════════════════════════════════════╗
+    const date = new Date().toLocaleString();
+    
+    const content = `╔════════════════════════════════════╗
 ║    MOKU ALPHA TERMINAL v5.0        ║
 ║    TACTICAL BATTLE REPORT           ║
 ╠════════════════════════════════════╣
-║ Generated: ${date.padEnd(24)} ║
+║ Generated: ${date}         
 ╠════════════════════════════════════╣
 ║ BATTLE ANALYSIS                     ║
 ╠════════════════════════════════════╣
 ║                                    ║
-║ ATHLETE ONE: ${p1.name.padEnd(18)} ║
-║   ├─ Speed: ${p1.spd} +${this.tweaks[0].spd}        ║
-║   ├─ Strength: ${p1.str} +${this.tweaks[0].str}     ║
-║   └─ Star Rank: ${'★'.repeat(p1.stars).padEnd(8)}   ║
+║ ATHLETE ONE: ${p1.name}           
+║   ├─ Speed: ${p1.spd} +${this.tweaks[0].spd}        
+║   ├─ Strength: ${p1.str} +${this.tweaks[0].str}     
+║   └─ Star Rank: ${'★'.repeat(p1.stars)}   
 ║                                    ║
-║ ATHLETE TWO: ${p2.name.padEnd(18)} ║
-║   ├─ Speed: ${p2.spd} +${this.tweaks[1].spd}        ║
-║   ├─ Strength: ${p2.str} +${this.tweaks[1].str}     ║
-║   └─ Star Rank: ${'★'.repeat(p2.stars).padEnd(8)}   ║
+║ ATHLETE TWO: ${p2.name}           
+║   ├─ Speed: ${p2.spd} +${this.tweaks[1].spd}        
+║   ├─ Strength: ${p2.str} +${this.tweaks[1].str}     
+║   └─ Star Rank: ${'★'.repeat(p2.stars)}   
 ║                                    ║
 ╠════════════════════════════════════╣
-║ RESULT: BATTLE SIMULATED            ║
+║ WINNER: ${winner.name} (${winProb}%)      
 ║ STATUS: REPORT GENERATED            ║
-╚════════════════════════════════════╝
-    `;
+╚════════════════════════════════════╝`;
     
     const blob = new Blob([content], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; 
     a.download = `Moku_Report_${Date.now()}.txt`; 
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
     
     this.print("> ✓ REPORT_GENERATED: Tactical_Data_Saved");
-    this.print(`> 📁 FILENAME: Moku_Report_${Date.now()}.txt`);
     
-    const btn = event?.target;
-    if (btn) {
-        btn.classList.add('animate-pulse');
-        setTimeout(() => btn.classList.remove('animate-pulse'), 500);
+    // Visual feedback
+    if (event && event.target) {
+        const btn = event.target.closest('button');
+        if (btn) {
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        }
     }
 }
 
