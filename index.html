@@ -44,6 +44,12 @@
 
         <main>
             <section id="arena-section" class="content-section">
+        <div class="text-[10px] text-cyan-600 mb-4 uppercase tracking-widest border border-cyan-900/30 p-3 text-center bg-black/50">
+        SELECT TWO ATHLETE CARDS BELOW TO INITIATE BATTLE SEQUENCE
+        </div>
+    
+    <div class="grid grid-cols-5 gap-3 mb-8" id="fighter-grid"></div>
+    <div id="battle-stage" class="hidden border border-cyan-900 p-6 bg-black/90 rounded-sm">
                 <div class="grid grid-cols-5 gap-3 mb-8" id="fighter-grid"></div>
                 <div id="battle-stage" class="hidden border border-cyan-900 p-6 bg-black/90 rounded-sm">
                     <div class="grid grid-cols-2 gap-8 mb-8">
@@ -96,8 +102,12 @@
             </section>
 
             <section id="schemes-section" class="content-section hidden">
-                <div class="grid gap-3" id="schemes-grid"></div>
+                <div class="text-[10px] text-pink-600 mb-4 uppercase tracking-widest border border-pink-900/30 p-3 text-center bg-black/50">
+         CLICK ANY STRATEGY CARD BELOW TO DECRYPT ITS EFFECTIVENESS
+                 </div>
+        <div class="grid gap-3" id="schemes-grid"></div>
             </section>
+
 
             <section id="scout-section" class="content-section hidden">
                 <div class="overflow-x-auto">
