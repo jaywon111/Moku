@@ -87,15 +87,54 @@ class MokuFinal {
     }
 
     downloadReport() {
-        const p1 = this.mokis.find(m => m.id === this.selected[0]);
-        const p2 = this.mokis.find(m => m.id === this.selected[1]);
-        const content = `MOKU ALPHA TERMINAL REPORT\n==========================\nAthlete 1: ${p1.name} (Mod Speed: +${this.tweaks[0].spd})\nAthlete 2: ${p2.name} (Mod Speed: +${this.tweaks[1].spd})\nResult: SUCCESSFUL SIMULATION\nGrand Arena S1 Ready.`;
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'Moku_Tactical_Report.txt'; a.click();
-        this.print("> REPORT GENERATED. CHECK DOWNLOADS.");
+    const p1 = this.mokis.find(m => m.id === this.selected[0]);
+    const p2 = this.mokis.find(m => m.id === this.selected[1]);
+    
+    const date = new Date().toLocaleString();
+    const winner = this.calculateWinner();
+    
+    const content = `
+╔════════════════════════════════════╗
+║    MOKU ALPHA TERMINAL v5.0        ║
+║    TACTICAL BATTLE REPORT           ║
+╠════════════════════════════════════╣
+║ Generated: ${date.padEnd(24)} ║
+╠════════════════════════════════════╣
+║ BATTLE ANALYSIS                     ║
+╠════════════════════════════════════╣
+║                                    ║
+║ ATHLETE ONE: ${p1.name.padEnd(18)} ║
+║   ├─ Speed: ${p1.spd} +${this.tweaks[0].spd}        ║
+║   ├─ Strength: ${p1.str} +${this.tweaks[0].str}     ║
+║   └─ Star Rank: ${'★'.repeat(p1.stars).padEnd(8)}   ║
+║                                    ║
+║ ATHLETE TWO: ${p2.name.padEnd(18)} ║
+║   ├─ Speed: ${p2.spd} +${this.tweaks[1].spd}        ║
+║   ├─ Strength: ${p2.str} +${this.tweaks[1].str}     ║
+║   └─ Star Rank: ${'★'.repeat(p2.stars).padEnd(8)}   ║
+║                                    ║
+╠════════════════════════════════════╣
+║ RESULT: BATTLE SIMULATED            ║
+║ STATUS: REPORT GENERATED            ║
+╚════════════════════════════════════╝
+    `;
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; 
+    a.download = `Moku_Report_${Date.now()}.txt`; 
+    a.click();
+    
+    this.print("> ✓ REPORT_GENERATED: Tactical_Data_Saved");
+    this.print(`> 📁 FILENAME: Moku_Report_${Date.now()}.txt`);
+    
+    const btn = event?.target;
+    if (btn) {
+        btn.classList.add('animate-pulse');
+        setTimeout(() => btn.classList.remove('animate-pulse'), 500);
     }
+}
 
     renderScout() {
         document.getElementById('scout-body').innerHTML = this.mokis.map(m => {
@@ -107,6 +146,11 @@ class MokuFinal {
                 <td class="p-4 text-right ${sleeper ? 'text-green-500 italic' : 'text-gray-600'}">${sleeper ? 'SLEEPER: BUY' : 'STABLE: HOLD'}</td>
             </tr>`;
         }).join('');
+    }
+
+    toggleScheme(el) {
+        document.querySelectorAll('.scheme-item').forEach(i => i !== el && i.classList.remove('active'));
+        el.classList.toggle('active');
     }
 
     navigate(t) {
