@@ -11,7 +11,7 @@
 <body>
     <canvas id="matrix"></canvas>
     <div class="scanline"></div>
-    <div class="max-w-4xl mx-auto p-3 sm:p-4 md:p-8 flex flex-col gap-4 sm:gap-6">
+    <div class="w-full mx-auto p-2 sm: p-4 md: p-8 flex flex-col gap-3 sm: gap-6">
         
         
         <header class="border-b border-cyan-900 pb-6 flex justify-between items-center">
@@ -26,7 +26,7 @@
         </header>
 
         
-        <div class="bg-black/80 border border-cyan-900 p-4 rounded shadow-2xl backdrop-blur-md command-line">
+        <div class="bg-black/80 border border-cyan-900 p-3 sm: p-4 rounded shadow-2xl backdrop-blur-md command-line w-full">
             <div id="terminal-output" class="text-[10px] mb-3 h-20 overflow-y-auto flex flex-col text-cyan-400 font-mono leading-relaxed">
                 <div>> SEASON 1 ACTIVE</div>
                 <div>> TYPE 'help' FOR COMMANDS | $1M POOL LIVE</div>
@@ -52,7 +52,7 @@
                 </div>
                 
                 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 sm:mb-8" id="team-grid"></div>
+                <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-5 sm:gap-3 mb-4 sm:mb-8 w-full" id="team-grid"></div>
                 
                 
                 <div id="battle-stage" class="hidden border border-cyan-900 p-4 sm:p-6 bg-black/90 rounded-sm">
@@ -61,7 +61,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                         
                           
-                        <div class="border border-cyan-900 p-4 bg-gradient-to-br from-cyan-950/20 to-transparent">
+                        <div class="border border-cyan-900 p-3 sm: p-6 bg-gradient-to-br from-cyan-950/20 to-transparent">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="w-16 h-16 border border-cyan-800 overflow-hidden bg-black flex items-center justify-center">
                                     <img id="team1-img" src="" class="w-full h-full object-cover hidden">
@@ -145,7 +145,7 @@
                         </div>
                         
                         
-                        <div class="border border-pink-900 p-4 bg-gradient-to-br from-pink-950/20 to-transparent">
+                        <div class="border border-pink-900 p-3 sm: p-6 bg-gradient-to-br from-pink-950/20 to-transparent">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="w-16 h-16 border border-pink-800 overflow-hidden bg-black flex items-center justify-center">
                                     <img id="team2-img" src="" class="w-full h-full object-cover hidden">

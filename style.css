@@ -194,3 +194,18 @@
             background: #0a0a0a;
             border-left: 3px solid var(--moku-pink);
         }
+        @media (max-width: 640px) {
+                .max-w-4xl {
+                        max-width: 100%;
+                        padding-left: 8px;
+                        padding-right: 8px;
+                }
+                .team-card img {
+                        height: 70px;
+                }
+                #team-grid {
+                        margin-left: -2px;
+                        margin-right: -2px;
+                        width: calc(100% + 4px);
+                }
+        }
