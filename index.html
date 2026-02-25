@@ -13,100 +13,133 @@
     <div class="scanline"></div>
     <div class="max-w-4xl mx-auto p-3 sm:p-4 md:p-8 flex flex-col gap-4 sm:gap-6">
         
+        
         <header class="border-b border-cyan-900 pb-6 flex justify-between items-center">
             <div>
-                <div class="text-[10px] text-cyan-600 tracking-[0.5em] uppercase font-bold">MOKU ALPHA TERMINAL</div>
-                <h1 class="header-font text-4xl font-black text-white tracking-tighter italic">GRAND</h1><span class="text-pink-600">.ARENA</span></h1>
+                <div class="text-[10px] text-cyan-600 tracking-[0.5em] uppercase font-bold">MOKU ALPHA TERMINAL // SEASON 1</div>
+                <h1 class="header-font text-4xl font-black text-white tracking-tighter italic">GRAND<span class="text-pink-600">.ARENA</span></h1>
             </div>
             <div class="text-right pl-6">
-                <div class="text-[10px] text-gray-500 uppercase">SEASON 1 POOL</div>
+                <div class="text-[10px] text-gray-500 uppercase">GUARANTEED POOL</div>
                 <div class="text-2xl font-black text-pink-500 italic">$1,000,000</div>
             </div>
         </header>
 
-        <div class="bg-black/80 border border-cyan-900 p-4 rounded shadow-2xl backdrop-blur-md">
+        
+        <div class="bg-black/80 border border-cyan-900 p-4 rounded shadow-2xl backdrop-blur-md command-line">
             <div id="terminal-output" class="text-[10px] mb-3 h-20 overflow-y-auto flex flex-col text-cyan-400 font-mono leading-relaxed">
-                <div>> SYSTEM BOOT COMPLETE...</div>
-                <div>> PACK PRICES: Standard 300G | Scheme 600G</div>
-                <div>> READY FOR TACTICAL ANALYSIS</div>
+                <div>> SEASON 1 ACTIVE</div>
+                <div>> TYPE 'help' FOR COMMANDS | $1M POOL LIVE</div>
             </div>
             <div class="flex items-center text-sm border-t border-cyan-950 pt-3">
-                <span class="mr-3 text-pink-500 font-bold tracking-widest">CMD_</span>
-                <input type="text" id="cli-input" class="bg-transparent border-none outline-none w-full text-cyan-400 placeholder-cyan-900 uppercase" placeholder="enter a command: status, arena, schemes, scout, clear" autocomplete="off" autofocus>
+                <span class="mr-3 text-pink-500 font-bold tracking-widest">⤚</span>
+                <input type="text" id="cli-input" class="bg-transparent border-none outline-none w-full text-cyan-400 placeholder-cyan-900 uppercase" placeholder="arena | schemes | scout | status | clear" autocomplete="off" autofocus>
             </div>
         </div>
 
+        
         <nav class="grid grid-cols-3 gap-2 sm:gap-4">
-            <button onclick="app.navigate('arena')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all min-h-[44px]">1. BATTLE ARENA</button>
-            <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all min-h-[44px]">2. STRATEGY DECK</button>
-            <button onclick="app.navigate('scout')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-h-[44px]">3. SCOUT</button>
+            <button onclick="app.navigate('arena')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all min-h-[44px]">⧩ ARENA</button>
+            <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all min-h-[44px]">◈ SCHEMES</button>
+            <button onclick="app.navigate('scout')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-h-[44px]">⍟ SCOUT</button>
         </nav>
 
         <main>
             
             <section id="arena-section" class="content-section">
                 <div class="text-[10px] text-cyan-600 mb-4 uppercase tracking-widest border border-cyan-900/30 p-3 text-center bg-black/50">
-                    SELECT TWO ATHLETE CARDS BELOW TO INITIATE BATTLE SEQUENCE 
+                     SELECT TWO TEAMS TO SIMULATE 3V3 MAYHEM 
                 </div>
                 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 sm:mb-8" id="fighter-grid"></div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 sm:mb-8" id="team-grid"></div>
+                
                 
                 <div id="battle-stage" class="hidden border border-cyan-900 p-4 sm:p-6 bg-black/90 rounded-sm">
-            
+                    
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                         
+                          
                         <div class="border border-cyan-900 p-4 bg-gradient-to-br from-cyan-950/20 to-transparent">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="w-16 h-16 border border-cyan-800 overflow-hidden">
-                                    <img id="fighter1-img" src="" class="w-full h-full object-cover">
+                                <div class="w-16 h-16 border border-cyan-800 overflow-hidden bg-black flex items-center justify-center">
+                                    <img id="team1-img" src="" class="w-full h-full object-cover hidden">
+                                    <span id="team1-icon" class="text-3xl filter-none">⍟</span>
                                 </div>
-                                <div>
-                                    <div class="text-[8px] text-cyan-600">MOKU ALPHA</div>
-                                    <div id="t1-title" class="header-font text-white text-lg font-black tracking-tighter">01</div>
-                                    <div class="text-[10px] text-pink-500" id="t1-pwr">PWR: 0</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-[8px] text-cyan-600">TEAM ALPHA</div>
+                                        <div class="text-[8px] text-cyan-600">CAPTAIN</div>
+                                    </div>
+                                    <input type="text" id="team1-name" value="TEAM ALPHA" 
+                                           class="bg-transparent border-b border-cyan-800 text-white text-sm font-black w-full mb-1 uppercase">
+                                    <div class="text-[10px] text-pink-500" id="team1-pwr">PWR: 0</div>
                                 </div>
                             </div>
                             
+                            
+                            <div class="team-roster mb-3">
+                                <div class="text-[7px] text-cyan-700 mb-1">ROSTER // GENESIS MOKI</div>
+                                <div class="grid grid-cols-3 gap-1 text-center">
+                                    <div class="border border-cyan-900/30 p-1">
+                                        <div id="team1-moki1" class="text-[8px] text-white">#1042</div>
+                                    </div>
+                                    <div class="border border-cyan-900/30 p-1">
+                                        <div id="team1-moki2" class="text-[8px] text-white">#0891</div>
+                                    </div>
+                                    <div class="border border-cyan-900/30 p-1">
+                                        <div id="team1-moki3" class="text-[8px] text-white">#4523</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                           
                             <div class="space-y-3">
-                                <!-- SPD -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">SPD x1.5</span>
-                                        <span id="t1-spd-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">SPEED x1.5
+                                            <span class="tooltip-text">Normal movement speed on ground and in the air</span>
+                                        </span>
+                                        <span id="team1-spd-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(0, 'spd', this.value, 't1-spd-val', 't1-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'spd', this.value, 'team1-spd-val', 'team1-pwr')">
                                 </div>
-                                <!-- STR -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">STR x1.2</span>
-                                        <span id="t1-str-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">STRENGTH x1.2
+                                            <span class="tooltip-text">Movement speed on ground and air while in Buff form</span>
+                                        </span>
+                                        <span id="team1-str-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(0, 'str', this.value, 't1-str-val', 't1-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'str', this.value, 'team1-str-val', 'team1-pwr')">
                                 </div>
-                                <!-- DEF -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">DEF x1.1</span>
-                                        <span id="t1-def-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">DEFENSE x1.1
+                                            <span class="tooltip-text">Affects Wart riding speed and time to transform into Buff Moki</span>
+                                        </span>
+                                        <span id="team1-def-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(0, 'def', this.value, 't1-def-val', 't1-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'def', this.value, 'team1-def-val', 'team1-pwr')">
                                 </div>
-                                <!-- DEX -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">DEX x0.8</span>
-                                        <span id="t1-dex-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">DEXTERITY x0.8
+                                            <span class="tooltip-text">Movement speed while carrying a Gacha Ball</span>
+                                        </span>
+                                        <span id="team1-dex-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(0, 'dex', this.value, 't1-dex-val', 't1-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'dex', this.value, 'team1-dex-val', 'team1-pwr')">
                                 </div>
-                                <!-- FRT -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">FRT x1</span>
-                                        <span id="t1-frt-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">FORTITUDE x1.0
+                                            <span class="tooltip-text">Affects respawn time and time to deposit Gacha Balls</span>
+                                        </span>
+                                        <span id="team1-frt-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(0, 'frt', this.value, 't1-frt-val', 't1-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'frt', this.value, 'team1-frt-val', 'team1-pwr')">
                                 </div>
                             </div>
                         </div>
@@ -114,64 +147,107 @@
                         
                         <div class="border border-pink-900 p-4 bg-gradient-to-br from-pink-950/20 to-transparent">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="w-16 h-16 border border-pink-800 overflow-hidden">
-                                    <img id="fighter2-img" src="" class="w-full h-full object-cover">
+                                <div class="w-16 h-16 border border-pink-800 overflow-hidden bg-black flex items-center justify-center">
+                                    <img id="team2-img" src="" class="w-full h-full object-cover hidden">
+                                    <span id="team2-icon" class="text-3xl filter-none">⍟</span>
                                 </div>
-                                <div>
-                                    <div class="text-[8px] text-pink-600">MOKU OMEGA</div>
-                                    <div id="t2-title" class="header-font text-white text-lg font-black tracking-tighter">02</div>
-                                    <div class="text-[10px] text-pink-500" id="t2-pwr">PWR: 0</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-[8px] text-pink-600">TEAM OMEGA</div>
+                                        <div class="text-[8px] text-pink-600">CAPTAIN</div>
+                                    </div>
+                                    <input type="text" id="team2-name" value="TEAM OMEGA" 
+                                           class="bg-transparent border-b border-pink-800 text-white text-sm font-black w-full mb-1 uppercase">
+                                    <div class="text-[10px] text-pink-500" id="team2-pwr">PWR: 0</div>
                                 </div>
                             </div>
                             
+                            
+                            <div class="team-roster mb-3">
+                                <div class="text-[7px] text-pink-700 mb-1">ROSTER // GENESIS MOKI</div>
+                                <div class="grid grid-cols-3 gap-1 text-center">
+                                    <div class="border border-pink-900/30 p-1">
+                                        <div id="team2-moki1" class="text-[8px] text-white">#2357</div>
+                                    </div>
+                                    <div class="border border-pink-900/30 p-1">
+                                        <div id="team2-moki2" class="text-[8px] text-white">#6712</div>
+                                    </div>
+                                    <div class="border border-pink-900/30 p-1">
+                                        <div id="team2-moki3" class="text-[8px] text-white">#9034</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
                             <div class="space-y-3">
-                                <!-- SPD -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">SPD x1.5</span>
-                                        <span id="t2-spd-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">SPEED x1.5
+                                            <span class="tooltip-text">Normal movement speed on ground and in the air</span>
+                                        </span>
+                                        <span id="team2-spd-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(1, 'spd', this.value, 't2-spd-val', 't2-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'spd', this.value, 'team2-spd-val', 'team2-pwr')">
                                 </div>
-                                <!-- STR -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">STR x1.2</span>
-                                        <span id="t2-str-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">STRENGTH x1.2
+                                            <span class="tooltip-text">Movement speed on ground and air while in Buff form</span>
+                                        </span>
+                                        <span id="team2-str-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(1, 'str', this.value, 't2-str-val', 't2-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'str', this.value, 'team2-str-val', 'team2-pwr')">
                                 </div>
-                                <!-- DEF -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">DEF x1.1</span>
-                                        <span id="t2-def-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">DEFENSE x1.1
+                                            <span class="tooltip-text">Affects Wart riding speed and time to transform into Buff Moki</span>
+                                        </span>
+                                        <span id="team2-def-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(1, 'def', this.value, 't2-def-val', 't2-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'def', this.value, 'team2-def-val', 'team2-pwr')">
                                 </div>
-                                <!-- DEX -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">DEX x0.8</span>
-                                        <span id="t2-dex-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">DEXTERITY x0.8
+                                            <span class="tooltip-text">Movement speed while carrying a Gacha Ball</span>
+                                        </span>
+                                        <span id="team2-dex-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(1, 'dex', this.value, 't2-dex-val', 't2-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'dex', this.value, 'team2-dex-val', 'team2-pwr')">
                                 </div>
-                                <!-- FRT -->
                                 <div>
                                     <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="text-gray-500">FRT x1</span>
-                                        <span id="t2-frt-val" class="stat-glow">50</span>
+                                        <span class="stat-tooltip text-gray-500">FORTITUDE x1.0
+                                            <span class="tooltip-text">Affects respawn time and time to deposit Gacha Balls</span>
+                                        </span>
+                                        <span id="team2-frt-val" class="stat-glow">50</span>
                                     </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateStat(1, 'frt', this.value, 't2-frt-val', 't2-pwr')">
+                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'frt', this.value, 'team2-frt-val', 'team2-pwr')">
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <div class="win-condition-badge gacha-badge flex flex-col items-center">
+                            <span>🥎 GACHA</span>
+                            <span class="text-white text-[6px]">Collect 10 balls</span>
+                        </div>
+                        <div class="win-condition-badge combat-badge flex flex-col items-center">
+                            <span>⚔️ COMBAT</span>
+                            <span class="text-white text-[6px]">Eliminations</span>
+                        </div>
+                        <div class="win-condition-badge wart-badge flex flex-col items-center">
+                            <span>🐢 WART</span>
+                            <span class="text-white text-[6px]">Ride to base</span>
+                        </div>
+                    </div>
+                    
+                    
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-2 mb-6">
-                        <button onclick="app.startSimulation()" class="w-full sm:flex-2 bg-white text-black font-black py-3 sm:py-4 tracking-[0.3em] sm:tracking-[0.4em] hover:bg-pink-600 hover:text-white transition-all uppercase text-[9px] sm:text-[10px]">✖ SIMULATE MAYHEM</button>
+                        <button onclick="app.startSimulation()" class="w-full sm:flex-2 bg-white text-black font-black py-3 sm:py-4 tracking-[0.3em] sm:tracking-[0.4em] hover:bg-pink-600 hover:text-white transition-all uppercase text-[9px] sm:text-[10px]">✖ SIMULATE 3V3 MAYHEM</button>
                         <button onclick="app.downloadReport(event)" class="w-full sm:flex-1 bg-cyan-900 text-cyan-300 font-bold py-3 sm:py-4 hover:bg-cyan-500 hover:text-white transition-all uppercase text-[7px] sm:text-[8px] border border-cyan-700 flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -190,9 +266,9 @@
                                 <div class="chaos-bar-slider" id="chaos-slider" style="left: 50%"></div>
                             </div>
                             <div class="flex justify-between text-[9px] text-cyan-600">
-                                <span>MOKU ALPHA</span>
+                                <span>TEAM ALPHA</span>
                                 <span>CHAOS FACTOR</span>
-                                <span>MOKU OMEGA</span>
+                                <span>TEAM OMEGA</span>
                             </div>
                         </div>
                         
@@ -200,11 +276,11 @@
                         <div id="results-state" class="hidden">
                             <div class="grid grid-cols-2 gap-4 mb-6 text-center">
                                 <div>
-                                    <div class="text-[10px] text-cyan-500">MOKU ALPHA</div>
+                                    <div class="text-[10px] text-cyan-500">TEAM ALPHA</div>
                                     <div class="text-2xl font-black text-white" id="alpha-pct">0%</div>
                                 </div>
                                 <div>
-                                    <div class="text-[10px] text-pink-500">MOKU OMEGA</div>
+                                    <div class="text-[10px] text-pink-500">TEAM OMEGA</div>
                                     <div class="text-2xl font-black text-white" id="omega-pct">0%</div>
                                 </div>
                             </div>
@@ -218,9 +294,26 @@
                                 <span class="text-[10px] text-pink-500" id="chaos-factor">0%</span>
                             </div>
                             
+                            
+                            <div class="grid grid-cols-3 gap-2 mb-4 text-[8px]">
+                                <div class="text-center gacha-badge border p-1">
+                                    <div>GACHA</div>
+                                    <div id="gacha-winner" class="text-white">-</div>
+                                </div>
+                                <div class="text-center combat-badge border p-1">
+                                    <div>COMBAT</div>
+                                    <div id="combat-winner" class="text-white">-</div>
+                                </div>
+                                <div class="text-center wart-badge border p-1">
+                                    <div>WART</div>
+                                    <div id="wart-winner" class="text-white">-</div>
+                                </div>
+                            </div>
+                            
                             <div class="text-center border-t border-pink-900/30 pt-4">
-                                <div class="text-[8px] text-gray-600 mb-1">WINNER</div>
+                                <div class="text-[8px] text-gray-600 mb-1">VICTORIOUS TEAM</div>
                                 <div id="winner-name" class="header-font text-3xl font-black italic glitch-text" style="color: var(--moku-pink)"></div>
+                                <div class="text-[8px] text-cyan-600 mt-2">TOP 100 CHAMPIONS EARN ROYALTIES</div>
                             </div>
                         </div>
                     </div>
@@ -230,22 +323,27 @@
             
             <section id="schemes-section" class="content-section hidden">
                 <div class="text-[10px] text-pink-600 mb-4 uppercase tracking-widest border border-pink-900/30 p-3 text-center bg-black/50">
-                     CLICK ANY STRATEGY CARD BELOW TO DECRYPT ITS EFFECTIVENESS 
+                     600G SCHEME PACKS // mxp MULTIPLIERS 
                 </div>
                 
                 <div class="grid gap-3" id="schemes-grid"></div>
+                <div class="text-[8px] text-cyan-700 mt-4 text-center">mxp & TRAINING PROGRESS CARRY TO SEASON 2</div>
             </section>
 
             
             <section id="scout-section" class="content-section hidden">
+                <div class="text-[10px] text-cyan-600 mb-4 uppercase tracking-widest border border-cyan-900/30 p-3 text-center bg-black/50">
+                    🌟 14-DAY SNAPSHOT TRACKER
+                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-[11px] font-mono border border-cyan-900/30">
                         <thead class="bg-cyan-950/40 text-cyan-500 uppercase text-[9px]">
-                            <tr><th class="p-4">Athlete</th><th class="p-4">SPD</th><th class="p-4">Rank</th><th class="p-4 text-right">Analysis</th></tr>
+                            <tr><th class="p-4">Genesis Moki</th><th class="p-4">SPD</th><th class="p-4">Current ★</th><th class="p-4 text-right">Analysis</th></tr>
                         </thead>
                         <tbody id="scout-body" class="text-white"></tbody>
                     </table>
                 </div>
+                <div class="text-[8px] text-cyan-700 mt-4 text-center italic">* SLEEPER = 1-3★ with 80+ SPD • Buy before snapshot</div>
             </section>
         </main>
     </div>

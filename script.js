@@ -1,16 +1,60 @@
-class MokuFinal {
+class MokuAlphaTerminal {
     constructor() {
-        this.tweaks = [
-            {spd:50, str:50, def:50, dex:50, frt:50},
-            {spd:50, str:50, def:50, dex:50, frt:50}
+        // Team stats (averages)
+        this.teamStats = [
+            {spd:50, str:50, def:50, dex:50, frt:50}, // Team Alpha
+            {spd:50, str:50, def:50, dex:50, frt:50}  // Team Omega
         ];
-        this.mokis = [
-            { id: 1, name: "Neon Oni", img: "https://i.ibb.co/Vcr0vHmh/Screenshot-20260219-204125.jpg", stars: 8, spd: 95, str: 88, def: 70, dex: 65, frt: 80 },
-            { id: 2, name: "Void Cat", img: "https://i.ibb.co/Xx3LzTyB/Screenshot-20260219-204357.jpg", stars: 6, spd: 88, str: 60, def: 75, dex: 90, frt: 70 },
-            { id: 3, name: "Cyber Toad", img: "https://i.ibb.co/cXVcQSW8/Screenshot-20260219-204204.jpg", stars: 4, spd: 40, str: 90, def: 85, dex: 45, frt: 95 },
-            { id: 4, name: "Mecha Kong", img: "https://i.ibb.co/5g2FtYNr/Screenshot-20260219-204608.jpg", stars: 1, spd: 92, str: 75, def: 80, dex: 70, frt: 60 },
-            { id: 5, name: "Glitch Spirit", img: "https://i.ibb.co/ZpWgZJGY/Screenshot-20260219-204810.jpg", stars: 2, spd: 85, str: 98, def: 50, dex: 95, frt: 88 }
+        
+        // TEAMS (each = 3 Moki)
+        this.teams = [
+            { 
+                id: 1, 
+                name: "TEAM ALPHA", 
+                captain: "GENESIS #1042",
+                roster: ["#1042", "#0891", "#4523"],
+                img: "https://placehold.co/400x400/ff007a/00f0ff?text=TEAM+A",
+                stars: 8, 
+                spd: 95, str: 88, def: 70, dex: 65, frt: 80 
+            },
+            { 
+                id: 2, 
+                name: "TEAM OMEGA", 
+                captain: "GENESIS #2357",
+                roster: ["#2357", "#6712", "#9034"],
+                img: "https://placehold.co/400x400/00f0ff/ff007a?text=TEAM+O",
+                stars: 6, 
+                spd: 88, str: 60, def: 75, dex: 90, frt: 70 
+            },
+            { 
+                id: 3, 
+                name: "TEAM GHOST", 
+                captain: "GENESIS #3891",
+                roster: ["#3891", "#5123", "#7765"],
+                img: "https://placehold.co/400x400/ff007a/00f0ff?text=TEAM+G",
+                stars: 4, 
+                spd: 40, str: 90, def: 85, dex: 45, frt: 95 
+            },
+            { 
+                id: 4, 
+                name: "TEAM CYBER", 
+                captain: "GENESIS #4562",
+                roster: ["#4562", "#2341", "#8902"],
+                img: "https://placehold.co/400x400/00f0ff/ff007a?text=TEAM+C",
+                stars: 1, 
+                spd: 92, str: 75, def: 80, dex: 70, frt: 60 
+            },
+            { 
+                id: 5, 
+                name: "TEAM SPIRIT", 
+                captain: "GENESIS #5738",
+                roster: ["#5738", "#9901", "#1123"],
+                img: "https://placehold.co/400x400/ff007a/00f0ff?text=TEAM+S",
+                stars: 2, 
+                spd: 85, str: 98, def: 50, dex: 95, frt: 88 
+            }
         ];
+        
         this.schemes = [
             { name: "TAKING A DIVE", rarity: "EPIC", effect: "+150 points on loss", strat: "Use when win-rate is <30% to farm points." },
             { name: "SHADOW ARTS", rarity: "RARE", effect: "+10% Speed to team", strat: "Dominates the first-strike meta." },
@@ -20,24 +64,26 @@ class MokuFinal {
             { name: "DATA BREACH", rarity: "EPIC", effect: "Reveal opponent hidden stats", strat: "Counter 'Sleeper' 1-star tactics." },
             { name: "OVERCLOCK", rarity: "LEGENDARY", effect: "+20% All Biological Stats", strat: "The ultimate power multiplier for Arena." }
         ];
-        this.selected = [];
+        
+        this.selectedTeams = [];
         this.chaosInterval = null;
         this.init();
     }
 
     init() {
-        this.renderFighters();
+        this.renderTeams();
         this.renderSchemes();
         this.renderScout();
         this.initCLI();
         this.initMatrix();
     }
 
-    renderFighters() {
-        document.getElementById('fighter-grid').innerHTML = this.mokis.map(m => `
-            <div class="moki-card" onclick="app.toggleSelection(${m.id}, this)">
-                <img src="${m.img}" class="h-24 w-full object-cover opacity-60 hover:opacity-100 transition-opacity">
-                <div class="p-2 text-[8px] font-bold text-center truncate uppercase">${m.name}</div>
+    renderTeams() {
+        document.getElementById('team-grid').innerHTML = this.teams.map(t => `
+            <div class="team-card" onclick="app.toggleTeam(${t.id}, this)">
+                <img src="${t.img}" class="h-24 w-full object-cover opacity-60 hover:opacity-100 transition-opacity">
+                <div class="p-2 text-[8px] font-bold text-center truncate uppercase">${t.name}</div>
+                <div class="text-[6px] text-center text-cyan-700">${t.roster.join(' ')}</div>
             </div>`).join('');
     }
 
@@ -64,51 +110,68 @@ class MokuFinal {
         }
     }
 
-    updateStat(idx, stat, val, labelId, pwrId) {
-        this.tweaks[idx][stat] = parseInt(val);
+    updateTeamStat(teamIdx, stat, val, labelId, pwrId) {
+        this.teamStats[teamIdx][stat] = parseInt(val);
         document.getElementById(labelId).innerText = val;
-        this.updatePower(idx, pwrId);
+        this.updateTeamPower(teamIdx, pwrId);
     }
 
-    updatePower(idx, pwrId) {
-        const t = this.tweaks[idx];
-        const power = (t.spd * 1.5 + t.str * 1.2 + t.def * 1.1 + t.dex * 0.8 + t.frt * 1) / 5;
+    updateTeamPower(teamIdx, pwrId) {
+        const t = this.teamStats[teamIdx];
+        
+        const power = (t.spd * 1.5 + t.str * 1.2 + t.def * 1.1 + t.dex * 0.8 + t.frt * 1.0) / 5;
         document.getElementById(pwrId).innerText = `PWR: ${power.toFixed(1)}`;
     }
 
-    toggleSelection(id, el) {
-        if (this.selected.includes(id)) {
-            this.selected = this.selected.filter(i => i !== id);
+    toggleTeam(id, el) {
+        if (this.selectedTeams.includes(id)) {
+            this.selectedTeams = this.selectedTeams.filter(i => i !== id);
             el.classList.remove('selected');
-        } else if (this.selected.length < 2) {
-            this.selected.push(id);
+        } else if (this.selectedTeams.length < 2) {
+            this.selectedTeams.push(id);
             el.classList.add('selected');
         }
         
-        if (this.selected.length === 2) {
+        if (this.selectedTeams.length === 2) {
             document.getElementById('battle-stage').classList.remove('hidden');
-            const p1 = this.mokis.find(m => m.id === this.selected[0]);
-            const p2 = this.mokis.find(m => m.id === this.selected[1]);
+            const team1 = this.teams.find(t => t.id === this.selectedTeams[0]);
+            const team2 = this.teams.find(t => t.id === this.selectedTeams[1]);
             
-            document.getElementById('t1-title').innerText = p1.name.toUpperCase();
-            document.getElementById('t2-title').innerText = p2.name.toUpperCase();
-            document.getElementById('fighter1-img').src = p1.img;
-            document.getElementById('fighter2-img').src = p2.img;
             
-            // Reset stats to default 50
+            document.getElementById('team1-name').value = team1.name;
+            document.getElementById('team2-name').value = team2.name;
+            
+            
+            document.getElementById('team1-moki1').innerText = team1.roster[0];
+            document.getElementById('team1-moki2').innerText = team1.roster[1];
+            document.getElementById('team1-moki3').innerText = team1.roster[2];
+            document.getElementById('team2-moki1').innerText = team2.roster[0];
+            document.getElementById('team2-moki2').innerText = team2.roster[1];
+            document.getElementById('team2-moki3').innerText = team2.roster[2];
+            
+            // Set images
+            document.getElementById('team1-img').src = team1.img;
+            document.getElementById('team2-img').src = team2.img;
+            document.getElementById('team1-img').classList.remove('hidden');
+            document.getElementById('team2-img').classList.remove('hidden');
+            document.getElementById('team1-icon').classList.add('hidden');
+            document.getElementById('team2-icon').classList.add('hidden');
+            
+            
             ['spd','str','def','dex','frt'].forEach(stat => {
-                this.tweaks[0][stat] = 50;
-                this.tweaks[1][stat] = 50;
-                document.getElementById(`t1-${stat}-val`).innerText = '50';
-                document.getElementById(`t2-${stat}-val`).innerText = '50';
-                document.querySelectorAll(`#t1-${stat}-val`).forEach(el => {
-                    const range = el.closest('div')?.nextElementSibling;
-                    if (range) range.value = 50;
-                });
+                this.teamStats[0][stat] = 50;
+                this.teamStats[1][stat] = 50;
+                document.getElementById(`team1-${stat}-val`).innerText = '50';
+                document.getElementById(`team2-${stat}-val`).innerText = '50';
+                
+                const range1 = document.querySelector(`#team1-${stat}-val`).closest('div')?.nextElementSibling;
+                const range2 = document.querySelector(`#team2-${stat}-val`).closest('div')?.nextElementSibling;
+                if (range1) range1.value = 50;
+                if (range2) range2.value = 50;
             });
             
-            this.updatePower(0, 't1-pwr');
-            this.updatePower(1, 't2-pwr');
+            this.updateTeamPower(0, 'team1-pwr');
+            this.updateTeamPower(1, 'team2-pwr');
             
             document.getElementById('simulation-result').classList.add('hidden');
         } else {
@@ -117,41 +180,52 @@ class MokuFinal {
     }
 
     startSimulation() {
+        if (this.selectedTeams.length < 2) {
+            this.print("> ERROR: Select two teams first");
+            return;
+        }
         
-        document.getElementById('simulation-result').classList.remove('hidden');
-        document.getElementById('calculating-state').classList.remove('hidden');
-        document.getElementById('results-state').classList.add('hidden');
+        const resultSection = document.getElementById('simulation-result');
+        const calcState = document.getElementById('calculating-state');
+        const resState = document.getElementById('results-state');
         
+        resultSection.classList.remove('hidden');
+        calcState.classList.remove('hidden');
+        resState.classList.add('hidden');
         
-        let pos = 30 + Math.random() * 40;
+        this.print("> INJECTING CHAOS PROTOCOL...");
+        document.body.style.filter = "hue-rotate(90deg) brightness(1.2)";
+        
+        let progress = 0;
         const slider = document.getElementById('chaos-slider');
         const fill = document.getElementById('chaos-fill');
         
         if (this.chaosInterval) clearInterval(this.chaosInterval);
         
         this.chaosInterval = setInterval(() => {
-            pos = 20 + Math.random() * 60;
-            slider.style.left = pos + '%';
-            fill.style.width = pos + '%';
-        }, 100);
-        
-        
-        setTimeout(() => {
-            clearInterval(this.chaosInterval);
-            this.showResults();
-        }, 2000);
+            progress += Math.random() * 15;
+            let visualPos = Math.sin(Date.now() / 100) * 30 + 50;
+            slider.style.left = visualPos + '%';
+            fill.style.width = visualPos + '%';
+            
+            if (progress >= 100) {
+                clearInterval(this.chaosInterval);
+                document.body.style.filter = "none";
+                this.showResults();
+            }
+        }, 80);
     }
 
     showResults() {
         document.getElementById('calculating-state').classList.add('hidden');
         document.getElementById('results-state').classList.remove('hidden');
         
-        const p1 = this.mokis.find(m => m.id === this.selected[0]);
-        const p2 = this.mokis.find(m => m.id === this.selected[1]);
+        const team1 = this.teams.find(t => t.id === this.selectedTeams[0]);
+        const team2 = this.teams.find(t => t.id === this.selectedTeams[1]);
         
         
-        const pow1 = (this.tweaks[0].spd * 1.5 + this.tweaks[0].str * 1.2 + this.tweaks[0].def * 1.1 + this.tweaks[0].dex * 0.8 + this.tweaks[0].frt * 1);
-        const pow2 = (this.tweaks[1].spd * 1.5 + this.tweaks[1].str * 1.2 + this.tweaks[1].def * 1.1 + this.tweaks[1].dex * 0.8 + this.tweaks[1].frt * 1);
+        const pow1 = (this.teamStats[0].spd * 1.5 + this.teamStats[0].str * 1.2 + this.teamStats[0].def * 1.1 + this.teamStats[0].dex * 0.8 + this.teamStats[0].frt * 1.0);
+        const pow2 = (this.teamStats[1].spd * 1.5 + this.teamStats[1].str * 1.2 + this.teamStats[1].def * 1.1 + this.teamStats[1].dex * 0.8 + this.teamStats[1].frt * 1.0);
         
         const total = pow1 + pow2;
         const pct1 = (pow1 / total * 100).toFixed(1);
@@ -160,65 +234,88 @@ class MokuFinal {
         document.getElementById('alpha-pct').innerText = pct1 + '%';
         document.getElementById('omega-pct').innerText = pct2 + '%';
         
+        
         const chaos = (Math.random() * 4 - 2).toFixed(2);
         document.getElementById('chaos-factor').innerText = chaos + '%';
         
         const barWidth = (pow1 / total * 100);
         document.getElementById('result-bar').style.width = barWidth + '%';
         
-        const winner = pow1 > pow2 ? p1 : p2;
+        
+        const gachaWinner = Math.random() < (pow1/(pow1+pow2)) ? team1.name : team2.name;
+        const combatWinner = Math.random() < (pow1/(pow1+pow2)) ? team1.name : team2.name;
+        const wartWinner = Math.random() < (pow1/(pow1+pow2)) ? team1.name : team2.name;
+        
+        document.getElementById('gacha-winner').innerText = gachaWinner;
+        document.getElementById('combat-winner').innerText = combatWinner;
+        document.getElementById('wart-winner').innerText = wartWinner;
+        
+        // Overall winner
+        const winner = pow1 > pow2 ? team1 : team2;
         const winnerEl = document.getElementById('winner-name');
-        winnerEl.innerText = winner.name.toUpperCase();
+        winnerEl.innerText = winner.name;
         winnerEl.style.color = pow1 > pow2 ? 'var(--neon-cyan)' : 'var(--moku-pink)';
         winnerEl.classList.add('glitch-text');
         setTimeout(() => winnerEl.classList.remove('glitch-text'), 800);
+        
+        this.print(`> VICTOR: ${winner.name} (${pow1 > pow2 ? pct1 : pct2}%)`);
+        this.print("> GACHA | COMBAT | WART // 3V3 MAYHEM");
     }
 
     downloadReport(event) {
-        if (this.selected.length < 2) {
-            this.print("> ERROR: Select two athletes first");
+        if (this.selectedTeams.length < 2) {
+            this.print("> ERROR: Select two teams first");
             return;
         }
         
-        const p1 = this.mokis.find(m => m.id === this.selected[0]);
-        const p2 = this.mokis.find(m => m.id === this.selected[1]);
+        const team1 = this.teams.find(t => t.id === this.selectedTeams[0]);
+        const team2 = this.teams.find(t => t.id === this.selectedTeams[1]);
         
-        const pow1 = (this.tweaks[0].spd * 1.5 + this.tweaks[0].str * 1.2 + this.tweaks[0].def * 1.1 + this.tweaks[0].dex * 0.8 + this.tweaks[0].frt * 1);
-        const pow2 = (this.tweaks[1].spd * 1.5 + this.tweaks[1].str * 1.2 + this.tweaks[1].def * 1.1 + this.tweaks[1].dex * 0.8 + this.tweaks[1].frt * 1);
-        const winner = pow1 > pow2 ? p1 : p2;
+        const pow1 = (this.teamStats[0].spd * 1.5 + this.teamStats[0].str * 1.2 + this.teamStats[0].def * 1.1 + this.teamStats[0].dex * 0.8 + this.teamStats[0].frt * 1.0);
+        const pow2 = (this.teamStats[1].spd * 1.5 + this.teamStats[1].str * 1.2 + this.teamStats[1].def * 1.1 + this.teamStats[1].dex * 0.8 + this.teamStats[1].frt * 1.0);
+        const winner = pow1 > pow2 ? team1 : team2;
         
         const date = new Date().toLocaleString();
         
         const content = `╔════════════════════════════════════╗
-║    MOKU ALPHA TERMINAL      ║
-║    BATTLE ARENA REPORT            ║
+║    MOKU ALPHA TERMINAL v2.1      ║
+║    3V3 MAYHEM BATTLE REPORT       ║
 ╠════════════════════════════════════╣
-║ Generated: ${date.padEnd(28)} ║
+║ ${date}                            
 ╠════════════════════════════════════╣
-║ MOKU ALPHA: ${p1.name.padEnd(24)} ║
-║   SPD: ${this.tweaks[0].spd}  STR: ${this.tweaks[0].str}  ║
-║   DEF: ${this.tweaks[0].def}  DEX: ${this.tweaks[0].dex}  ║
-║   FRT: ${this.tweaks[0].frt}  PWR: ${pow1.toFixed(1)}  ║
+║ TEAM ALPHA: ${team1.name}                      
+║ ROSTER: ${team1.roster.join(' ')}               
+║   SPD: ${this.teamStats[0].spd}  STR: ${this.teamStats[0].str}  
+║   DEF: ${this.teamStats[0].def}  DEX: ${this.teamStats[0].dex}  
+║   FRT: ${this.teamStats[0].frt}  PWR: ${pow1.toFixed(1)}  
 ╠════════════════════════════════════╣
-║ MOKU OMEGA: ${p2.name.padEnd(23)} ║
-║   SPD: ${this.tweaks[1].spd}  STR: ${this.tweaks[1].str}  ║
-║   DEF: ${this.tweaks[1].def}  DEX: ${this.tweaks[1].dex}  ║
-║   FRT: ${this.tweaks[1].frt}  PWR: ${pow2.toFixed(1)}  ║
+║ TEAM OMEGA: ${team2.name}                     
+║ ROSTER: ${team2.roster.join(' ')}               
+║   SPD: ${this.teamStats[1].spd}  STR: ${this.teamStats[1].str}  
+║   DEF: ${this.teamStats[1].def}  DEX: ${this.teamStats[1].dex}  
+║   FRT: ${this.teamStats[1].frt}  PWR: ${pow2.toFixed(1)}  
 ╠════════════════════════════════════╣
-║ WINNER: ${winner.name.padEnd(28)} ║
+║ WIN CONDITIONS:                                
+║ GACHA  → ${Math.random() < 0.5 ? team1.name : team2.name}           
+║ COMBAT → ${Math.random() < 0.5 ? team1.name : team2.name}           
+║ WART   → ${Math.random() < 0.5 ? team1.name : team2.name}           
+╠════════════════════════════════════╣
+║ VICTOR: ${winner.name}                         
+║ PRIZE POOL: $1,000,000 GUARANTEED  
+║ mXP CARRIES TO SEASON 2            
 ╚════════════════════════════════════╝`;
         
         const blob = new Blob([content], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url; 
-        a.download = `Moku_Arena_${Date.now()}.txt`; 
+        a.download = `Moku_3v3_${Date.now()}.txt`; 
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
         
-        this.print("> REPORT GENERATED: CHECK DOWNLOADS");
+        this.print("> REPORT GENERATED: 3V3 MAYHEM DATA");
         
         if (event && event.target) {
             const btn = event.target.closest('button');
@@ -230,13 +327,14 @@ class MokuFinal {
     }
 
     renderScout() {
-        document.getElementById('scout-body').innerHTML = this.mokis.map(m => {
-            const sleeper = m.stars < 3 && m.spd > 80;
+        document.getElementById('scout-body').innerHTML = this.teams.map(t => {
+            
+            const sleeper = t.stars < 3 && t.spd > 80;
             return `<tr class="border-b border-cyan-900/10">
-                <td class="p-4 font-bold tracking-tighter">${m.name}</td>
-                <td class="p-4 text-cyan-400">${m.spd}</td>
-                <td class="p-4 text-pink-500">${'★'.repeat(m.stars)}</td>
-                <td class="p-4 text-right ${sleeper ? 'text-green-500 italic' : 'text-gray-600'}">${sleeper ? 'SLEEPER: BUY' : 'STABLE: HOLD'}</td>
+                <td class="p-4 font-bold tracking-tighter">${t.captain}</td>
+                <td class="p-4 text-cyan-400">${t.spd}</td>
+                <td class="p-4 text-pink-500">${'★'.repeat(t.stars)}</td>
+                <td class="p-4 text-right ${sleeper ? 'text-green-500 italic' : 'text-gray-600'}">${sleeper ? '🚀 SLEEPER' : 'HOLD'}</td>
             </tr>`;
         }).join('');
     }
@@ -244,7 +342,7 @@ class MokuFinal {
     navigate(t) {
         document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
         document.getElementById(`${t}-section`).classList.remove('hidden');
-        //this.print(`> ACCESSING: ${t.toUpperCase()}`);
+        this.print(`> ACCESSING: ${t.toUpperCase()} SECTOR`);
     }
 
     initCLI() {
@@ -252,10 +350,24 @@ class MokuFinal {
             if (e.key === 'Enter') {
                 const cmd = e.target.value.toLowerCase().trim();
                 e.target.value = '';
-                if (['arena', 'schemes', 'scout'].includes(cmd)) this.navigate(cmd);
-                else if (cmd === 'status') this.print("SYSTEM: BATTLE ARENA ACTIVE");
-                else if (cmd === 'clear') document.getElementById('terminal-output').innerHTML = '';
-                else this.print(`> UNKNOWN: ${cmd}`);
+                
+                const commands = {
+                    'arena': () => this.navigate('arena'),
+                    'schemes': () => this.navigate('schemes'),
+                    'scout': () => this.navigate('scout'),
+                    'status': () => this.print("> SEASON 1: $1M POOL • mXP CARRIES OVER"),
+                    'clear': () => document.getElementById('terminal-output').innerHTML = '',
+                    'help': () => {
+                        this.print("> COMMANDS: arena, schemes, scout, status, clear");
+                        this.print("> TIP: Select two teams, tweak stats, simulate 3v3");
+                    }
+                };
+                
+                if (commands[cmd]) {
+                    commands[cmd]();
+                } else {
+                    this.print(`> UNKNOWN: '${cmd}' (type 'help')`);
+                }
             }
         });
     }
@@ -283,4 +395,5 @@ class MokuFinal {
         }, 33);
     }
 }
-const app = new MokuFinal();
+
+const app = new MokuAlphaTerminal();
