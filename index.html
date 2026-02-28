@@ -3,350 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>MOKU ALPHA TERMINAL</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>MOKU GRAND ARENA TERMINAL </title>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="matrix"></canvas>
-    <div class="scanline"></div>
-    <div class="w-full mx-auto p-2 sm: p-4 md: p-8 flex flex-col gap-3 sm: gap-6">
-        
-        
-        <header class="border-b border-cyan-900 pb-6 flex justify-between items-center">
-            <div>
-                <div class="text-[10px] text-cyan-600 tracking-[0.5em] uppercase font-bold">MOKU ALPHA TERMINAL // SEASON 1</div>
-                <h1 class="header-font text-4xl font-black text-white tracking-tighter italic">GRAND<span class="text-pink-600">.ARENA</span></h1>
+    <div class="container">
+        <div class="glass-panel header-mascot">
+            <div class="mascot-float" onclick="app.nextTip()">
+                <svg viewBox="0 0 200 200" width="90" height="90">
+                    <ellipse cx="100" cy="110" rx="45" ry="50" fill="#D27D2D" filter="url(#soft)"/>
+                    <ellipse cx="100" cy="130" rx="28" ry="32" fill="#E6B17E" opacity="0.7"/>
+                    <path d="M70 80 Q85 70, 100 80 Q115 70, 130 80" stroke="#B35E1A" stroke-width="1.5" fill="none" opacity="0.3"/>
+                    <path d="M75 100 Q100 90, 125 100" stroke="#B35E1A" stroke-width="1.5" fill="none" opacity="0.3"/>
+                    <path d="M65 50 L80 30 L95 45" fill="#8B4513" stroke="#5D3A1A" stroke-width="2"/>
+                    <path d="M135 50 L120 30 L105 45" fill="#8B4513" stroke="#5D3A1A" stroke-width="2"/>
+                    <circle cx="78" cy="42" r="6" fill="#FFB6C1" opacity="0.6"/>
+                    <circle cx="122" cy="42" r="6" fill="#FFB6C1" opacity="0.6"/>
+                    <circle cx="100" cy="90" r="40" fill="none" stroke="#B35E1A" stroke-width="1" opacity="0.2"/>
+                    <circle cx="75" cy="85" r="12" fill="#4A2E1E"/>
+                    <circle cx="75" cy="85" r="6" fill="#2A1A0E"/>
+                    <circle cx="70" cy="80" r="2.5" fill="white" class="eye-twinkle"/>
+                    <circle cx="80" cy="82" r="1.5" fill="white" class="eye-twinkle"/>
+                    <circle cx="125" cy="85" r="12" fill="#4A2E1E"/>
+                    <circle cx="125" cy="85" r="6" fill="#2A1A0E"/>
+                    <circle cx="120" cy="80" r="2.5" fill="white" class="eye-twinkle"/>
+                    <circle cx="130" cy="82" r="1.5" fill="white" class="eye-twinkle"/>
+                    <circle cx="100" cy="100" r="5" fill="#5D3A1A"/>
+                    <path d="M80 115 Q100 130, 120 115" stroke="#D32F2F" stroke-width="4" fill="none"/>
+                    <rect x="92" y="112" width="4" height="5" fill="white"/>
+                    <rect x="104" y="112" width="4" height="5" fill="white"/>
+                    <ellipse cx="100" cy="35" rx="6" ry="10" fill="#4CAF50"/>
+                    <ellipse cx="95" cy="30" rx="5" ry="8" fill="#66BB6A"/>
+                    <ellipse cx="105" cy="30" rx="5" ry="8" fill="#66BB6A"/>
+                    <ellipse cx="90" cy="25" rx="4" ry="6" fill="#81C784"/>
+                    <ellipse cx="110" cy="25" rx="4" ry="6" fill="#81C784"/>
+                    <defs>
+                        <filter id="soft" x="0" y="0" width="200" height="200">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5"/>
+                        </filter>
+                    </defs>
+                </svg>
             </div>
-            <div class="text-right pl-6">
-                <div class="text-[10px] text-gray-500 uppercase">GUARANTEED POOL</div>
-                <div class="text-2xl font-black text-pink-500 italic">$1,000,000</div>
+            <div id="speech-bubble" class="speech-bubble clickable" onclick="app.nextTip()">
+                👋 WELCOME TO THE GRAND ARENA TERMINAL! Click me for tips.
             </div>
-        </header>
+        </div>
 
-        
-        <div class="bg-black/80 border border-cyan-900 p-3 sm: p-4 rounded shadow-2xl backdrop-blur-md command-line w-full">
-            <div id="terminal-output" class="text-[10px] mb-3 h-20 overflow-y-auto flex flex-col text-cyan-400 font-mono leading-relaxed">
-                <div>> SEASON 1 ACTIVE</div>
-                <div>> TYPE 'help' FOR COMMANDS | $1M POOL LIVE</div>
+        <div class="command-center">
+            <div id="terminal-output" class="terminal-output">
+                <div>> MOKU TERMINAL</div>
+                <div>> TYPE 'help' FOR COMMANDS</div>
+                <div>> Click the tanuki for helpful tips!</div>
             </div>
-            <div class="flex items-center text-sm border-t border-cyan-950 pt-3">
-                <span class="mr-3 text-pink-500 font-bold tracking-widest">⤚</span>
-                <input type="text" id="cli-input" class="bg-transparent border-none outline-none w-full text-cyan-400 placeholder-cyan-900 uppercase" placeholder="arena | schemes | scout | status | clear" autocomplete="off" autofocus>
+            <div class="command-input">
+                <span class="command-prompt">⤚</span>
+                <input type="text" id="cli-input" placeholder="Enter command...">
             </div>
         </div>
 
         
-        <nav class="grid grid-cols-3 gap-2 sm:gap-4">
-            <button onclick="app.navigate('arena')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:text-black transition-all min-h-[44px]">⧩ ARENA</button>
-            <button onclick="app.navigate('schemes')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-pink-500 hover:text-black transition-all min-h-[44px]">◈ SCHEMES</button>
-            <button onclick="app.navigate('scout')" class="border border-cyan-800 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-h-[44px]">⍟ SCOUT</button>
-        </nav>
-
-        <main>
+        <div class="glass-panel">
+            <div class="toggle-header">
+                <div class="section-title" style="margin-bottom: 0;">
+                    <div class="accent"></div>
+                    <span>MY MOKI LOCKER🔒</span>
+                </div>
+                <button id="locker-toggle" class="toggle-btn" onclick="app.toggleLocker()">
+                    <span class="arrow">▼</span> CLOSE LOCKER
+                </button>
+            </div>
             
-            <section id="arena-section" class="content-section">
-                <div class="text-[10px] text-cyan-600 mb-4 uppercase tracking-widest border border-cyan-900/30 p-3 text-center bg-black/50">
-                     SELECT TWO TEAMS TO SIMULATE 3V3 MAYHEM 
-                </div>
+            <div id="locker-content" class="collapsible-content">
+                <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;" id="saved-mokis-container"></div>
                 
-                
-                <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-5 sm:gap-3 mb-4 sm:mb-8 w-full" id="team-grid"></div>
-                
-                
-                <div id="battle-stage" class="hidden border border-cyan-900 p-4 sm:p-6 bg-black/90 rounded-sm">
-                    
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
-                        
-                          
-                        <div class="border border-cyan-900 p-3 sm: p-6 bg-gradient-to-br from-cyan-950/20 to-transparent">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-16 h-16 border border-cyan-800 overflow-hidden bg-black flex items-center justify-center">
-                                    <img id="team1-img" src="" class="w-full h-full object-cover hidden">
-                                    <span id="team1-icon" class="text-3xl filter-none">⍟</span>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <div class="text-[8px] text-cyan-600">TEAM ALPHA</div>
-                                        <div class="text-[8px] text-cyan-600">CAPTAIN</div>
-                                    </div>
-                                    <input type="text" id="team1-name" value="TEAM ALPHA" 
-                                           class="bg-transparent border-b border-cyan-800 text-white text-sm font-black w-full mb-1 uppercase">
-                                    <div class="text-[10px] text-pink-500" id="team1-pwr">PWR: 0</div>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="team-roster mb-3">
-                                <div class="text-[7px] text-cyan-700 mb-1">ROSTER // GENESIS MOKI</div>
-                                <div class="grid grid-cols-3 gap-1 text-center">
-                                    <div class="border border-cyan-900/30 p-1">
-                                        <div id="team1-moki1" class="text-[8px] text-white">#1042</div>
-                                    </div>
-                                    <div class="border border-cyan-900/30 p-1">
-                                        <div id="team1-moki2" class="text-[8px] text-white">#0891</div>
-                                    </div>
-                                    <div class="border border-cyan-900/30 p-1">
-                                        <div id="team1-moki3" class="text-[8px] text-white">#4523</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                           
-                            <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">SPEED x1.5
-                                            <span class="tooltip-text">Normal movement speed on ground and in the air</span>
-                                        </span>
-                                        <span id="team1-spd-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'spd', this.value, 'team1-spd-val', 'team1-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">STRENGTH x1.2
-                                            <span class="tooltip-text">Movement speed on ground and air while in Buff form</span>
-                                        </span>
-                                        <span id="team1-str-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'str', this.value, 'team1-str-val', 'team1-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">DEFENSE x1.1
-                                            <span class="tooltip-text">Affects Wart riding speed and time to transform into Buff Moki</span>
-                                        </span>
-                                        <span id="team1-def-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'def', this.value, 'team1-def-val', 'team1-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">DEXTERITY x0.8
-                                            <span class="tooltip-text">Movement speed while carrying a Gacha Ball</span>
-                                        </span>
-                                        <span id="team1-dex-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'dex', this.value, 'team1-dex-val', 'team1-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">FORTITUDE x1.0
-                                            <span class="tooltip-text">Affects respawn time and time to deposit Gacha Balls</span>
-                                        </span>
-                                        <span id="team1-frt-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(0, 'frt', this.value, 'team1-frt-val', 'team1-pwr')">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="border border-pink-900 p-3 sm: p-6 bg-gradient-to-br from-pink-950/20 to-transparent">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-16 h-16 border border-pink-800 overflow-hidden bg-black flex items-center justify-center">
-                                    <img id="team2-img" src="" class="w-full h-full object-cover hidden">
-                                    <span id="team2-icon" class="text-3xl filter-none">⍟</span>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between items-center">
-                                        <div class="text-[8px] text-pink-600">TEAM OMEGA</div>
-                                        <div class="text-[8px] text-pink-600">CAPTAIN</div>
-                                    </div>
-                                    <input type="text" id="team2-name" value="TEAM OMEGA" 
-                                           class="bg-transparent border-b border-pink-800 text-white text-sm font-black w-full mb-1 uppercase">
-                                    <div class="text-[10px] text-pink-500" id="team2-pwr">PWR: 0</div>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="team-roster mb-3">
-                                <div class="text-[7px] text-pink-700 mb-1">ROSTER // GENESIS MOKI</div>
-                                <div class="grid grid-cols-3 gap-1 text-center">
-                                    <div class="border border-pink-900/30 p-1">
-                                        <div id="team2-moki1" class="text-[8px] text-white">#2357</div>
-                                    </div>
-                                    <div class="border border-pink-900/30 p-1">
-                                        <div id="team2-moki2" class="text-[8px] text-white">#6712</div>
-                                    </div>
-                                    <div class="border border-pink-900/30 p-1">
-                                        <div id="team2-moki3" class="text-[8px] text-white">#9034</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">SPEED x1.5
-                                            <span class="tooltip-text">Normal movement speed on ground and in the air</span>
-                                        </span>
-                                        <span id="team2-spd-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'spd', this.value, 'team2-spd-val', 'team2-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">STRENGTH x1.2
-                                            <span class="tooltip-text">Movement speed on ground and air while in Buff form</span>
-                                        </span>
-                                        <span id="team2-str-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'str', this.value, 'team2-str-val', 'team2-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">DEFENSE x1.1
-                                            <span class="tooltip-text">Affects Wart riding speed and time to transform into Buff Moki</span>
-                                        </span>
-                                        <span id="team2-def-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'def', this.value, 'team2-def-val', 'team2-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">DEXTERITY x0.8
-                                            <span class="tooltip-text">Movement speed while carrying a Gacha Ball</span>
-                                        </span>
-                                        <span id="team2-dex-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'dex', this.value, 'team2-dex-val', 'team2-pwr')">
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-[9px] mb-1">
-                                        <span class="stat-tooltip text-gray-500">FORTITUDE x1.0
-                                            <span class="tooltip-text">Affects respawn time and time to deposit Gacha Balls</span>
-                                        </span>
-                                        <span id="team2-frt-val" class="stat-glow">50</span>
-                                    </div>
-                                    <input type="range" min="0" max="100" value="50" oninput="app.updateTeamStat(1, 'frt', this.value, 'team2-frt-val', 'team2-pwr')">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <div class="win-condition-badge gacha-badge flex flex-col items-center">
-                            <span>🥎 GACHA</span>
-                            <span class="text-white text-[6px]">Collect 10 balls</span>
-                        </div>
-                        <div class="win-condition-badge combat-badge flex flex-col items-center">
-                            <span>⚔️ COMBAT</span>
-                            <span class="text-white text-[6px]">Eliminations</span>
-                        </div>
-                        <div class="win-condition-badge wart-badge flex flex-col items-center">
-                            <span>🐢 WART</span>
-                            <span class="text-white text-[6px]">Ride to base</span>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-2 mb-6">
-                        <button onclick="app.startSimulation()" class="w-full sm:flex-2 bg-white text-black font-black py-3 sm:py-4 tracking-[0.3em] sm:tracking-[0.4em] hover:bg-pink-600 hover:text-white transition-all uppercase text-[9px] sm:text-[10px]">✖ SIMULATE 3V3 MAYHEM</button>
-                        <button onclick="app.downloadReport(event)" class="w-full sm:flex-1 bg-cyan-900 text-cyan-300 font-bold py-3 sm:py-4 hover:bg-cyan-500 hover:text-white transition-all uppercase text-[7px] sm:text-[8px] border border-cyan-700 flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            DOWNLOAD REPORT
-                        </button>
-                    </div>
-                    
-                    
-                    <div id="simulation-result" class="hidden border border-pink-900/50 p-6 bg-pink-950/10">
-                        
-                        <div id="calculating-state" class="text-center hidden">
-                            <div class="text-[10px] text-pink-500 mb-4 tracking-[0.5em] uppercase calculating-pulse">CALCULATING...</div>
-                            <div class="chaos-bar-container mb-4" id="chaos-bar-container">
-                                <div class="chaos-bar-fill" id="chaos-fill" style="width: 50%"></div>
-                                <div class="chaos-bar-slider" id="chaos-slider" style="left: 50%"></div>
-                            </div>
-                            <div class="flex justify-between text-[9px] text-cyan-600">
-                                <span>TEAM ALPHA</span>
-                                <span>CHAOS FACTOR</span>
-                                <span>TEAM OMEGA</span>
-                            </div>
-                        </div>
-                        
-                        
-                        <div id="results-state" class="hidden">
-                            <div class="grid grid-cols-2 gap-4 mb-6 text-center">
-                                <div>
-                                    <div class="text-[10px] text-cyan-500">TEAM ALPHA</div>
-                                    <div class="text-2xl font-black text-white" id="alpha-pct">0%</div>
-                                </div>
-                                <div>
-                                    <div class="text-[10px] text-pink-500">TEAM OMEGA</div>
-                                    <div class="text-2xl font-black text-white" id="omega-pct">0%</div>
-                                </div>
-                            </div>
-                            
-                            <div class="chaos-bar-container mb-4">
-                                <div class="chaos-bar-fill" id="result-bar" style="width: 50%"></div>
-                            </div>
-                            
-                            <div class="text-center mb-4">
-                                <span class="text-[10px] text-gray-500">CHAOS FACTOR: </span>
-                                <span class="text-[10px] text-pink-500" id="chaos-factor">0%</span>
-                            </div>
-                            
-                            
-                            <div class="grid grid-cols-3 gap-2 mb-4 text-[8px]">
-                                <div class="text-center gacha-badge border p-1">
-                                    <div>GACHA</div>
-                                    <div id="gacha-winner" class="text-white">-</div>
-                                </div>
-                                <div class="text-center combat-badge border p-1">
-                                    <div>COMBAT</div>
-                                    <div id="combat-winner" class="text-white">-</div>
-                                </div>
-                                <div class="text-center wart-badge border p-1">
-                                    <div>WART</div>
-                                    <div id="wart-winner" class="text-white">-</div>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center border-t border-pink-900/30 pt-4">
-                                <div class="text-[8px] text-gray-600 mb-1">VICTORIOUS TEAM</div>
-                                <div id="winner-name" class="header-font text-3xl font-black italic glitch-text" style="color: var(--moku-pink)"></div>
-                                <div class="text-[8px] text-cyan-600 mt-2">TOP 100 CHAMPIONS EARN ROYALTIES</div>
-                            </div>
-                        </div>
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #333;">
+                    <div style="font-size: 14px; color: #888; margin-bottom: 16px;">➕ ADD NEW MOKI</div>
+                    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px;">
+                        <input type="text" id="new-moki-name" placeholder="MOKI ID (#1042)" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white; font-size: 14px;">
+                        <input type="number" id="new-moki-spd" placeholder="SPD" min="0" max="100" value="50" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white;">
+                        <input type="number" id="new-moki-str" placeholder="STR" min="0" max="100" value="50" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white;">
+                        <input type="number" id="new-moki-def" placeholder="DEF" min="0" max="100" value="50" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white;">
+                        <input type="number" id="new-moki-dex" placeholder="DEX" min="0" max="100" value="50" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white;">
+                        <input type="number" id="new-moki-frt" placeholder="FRT" min="0" max="100" value="50" style="background: #1A1A28; border: 1px solid #333; border-radius: 40px; padding: 16px 20px; color: white;">
+                        <button onclick="app.addMoki()" class="btn-primary" style="grid-column: span 2; padding: 16px;">💾 SAVE TO LOCKER</button>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
 
+        <div class="glass-panel">
+            <div class="toggle-header">
+                <div class="section-title" style="margin-bottom: 0;">
+                    <div class="accent" style="background: var(--moku-gold);"></div>
+                    <span>🏆 CHAMPION LEADERBOARD </span>
+                </div>
+                <button id="leaderboard-toggle" class="toggle-btn" onclick="app.toggleLeaderboard()">
+                    <span class="arrow">▼</span> CLOSE LEADERBOARD
+                </button>
+            </div>
             
-            <section id="schemes-section" class="content-section hidden">
-                <div class="text-[10px] text-pink-600 mb-4 uppercase tracking-widest border border-pink-900/30 p-3 text-center bg-black/50">
-                     600G SCHEME PACKS // mxp MULTIPLIERS 
+            <div id="leaderboard-content" class="collapsible-content">
+                <div class="champion-grid" id="champion-grid"></div>
+                
+                <div style="margin-top: 16px; font-size: 13px; color: #888; font-style: italic;">
+                    Tip: Click any Champion to see how YOUR lineup matches up against them
+                </div>
+            </div>
+        </div>
+
+        
+        <div style="display: flex; justify-content: center; margin: 16px 0 24px;">
+            <div class="mode-toggle" style="display: flex; background: var(--moku-gray); border-radius: 60px; padding: 6px;">
+                <button id="mode-classic" class="active" onclick="app.setMode('classic')" style="padding: 14px 40px; border-radius: 60px; border: none; background: transparent; color: #888; font-weight: 700; font-size: 16px; cursor: pointer;">⚔️ CLASSIC BATTLE</button>
+                <button id="mode-contest" onclick="app.setMode('contest')" style="padding: 14px 40px; border-radius: 60px; border: none; background: transparent; color: #888; font-weight: 700; font-size: 16px; cursor: pointer;">🏆 GRAND ARENA</button>
+            </div>
+        </div>
+
+        
+        <div id="classic-mode">
+            <div class="glass-panel">
+                <div class="section-title">
+                    <div class="accent" style="background: var(--moku-cyan);"></div>
+                    <span>⚔️ 3V3 BATTLE ARENA</span>
                 </div>
                 
-                <div class="grid gap-3" id="schemes-grid"></div>
-                <div class="text-[8px] text-cyan-700 mt-4 text-center">mxp & TRAINING PROGRESS CARRY TO SEASON 2</div>
-            </section>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                    
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <span style="font-size: 20px; font-weight: 700; color: var(--moku-cyan);">YOUR TEAM</span>
+                            <span class="tooltip">ⓘ <span class="tooltip-text">Select your Moki from the locker.</span></span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <div class="slot" id="my-team-slot1" onclick="app.openTeamPicker(1)">
+                                <div class="slot-content">SLOT 1</div>
+                                <button class="cancel-btn" onclick="app.cancelTeamSlot(1, event)">✕</button>
+                            </div>
+                            <div class="slot" id="my-team-slot2" onclick="app.openTeamPicker(2)">
+                                <div class="slot-content">SLOT 2</div>
+                                <button class="cancel-btn" onclick="app.cancelTeamSlot(2, event)">✕</button>
+                            </div>
+                            <div class="slot" id="my-team-slot3" onclick="app.openTeamPicker(3)">
+                                <div class="slot-content">SLOT 3</div>
+                                <button class="cancel-btn" onclick="app.cancelTeamSlot(3, event)">✕</button>
+                            </div>
+                        </div>
+                        <div id="my-team-power" style="margin-top: 16px; font-size: 14px; color: #888; text-align: center;"></div>
+                    </div>
+                    
+                    
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <span style="font-size: 20px; font-weight: 700; color: var(--moku-pink);">ENEMY TEAM</span>
+                            <span class="tooltip">ⓘ <span class="tooltip-text">Adjust enemy stats to simulate any opponent. All enemies share these average stats.</span></span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;">
+                            <div class="slot filled">ENEMY 1</div>
+                            <div class="slot filled">ENEMY 2</div>
+                            <div class="slot filled">ENEMY 3</div>
+                        </div>
+                        
+                        <div style="background: #1A1A28; border-radius: 24px; padding: 24px;">
+                            <div style="font-size: 14px; color: #888; margin-bottom: 16px;">ENEMY STATS (AVERAGE)</div>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div><div style="display: flex; justify-content: space-between;"><span class="tooltip">SPD <span class="tooltip-text">Normal movement speed on ground and in air</span></span> <span id="enemy-spd">50</span></div>
+                                <input type="range" min="0" max="100" value="50" style="width: 100%;" oninput="app.updateEnemyStat('spd', this.value)"></div>
+                                <div><div style="display: flex; justify-content: space-between;">STR <span id="enemy-str">50</span></div>
+                                <input type="range" min="0" max="100" value="50" style="width: 100%;" oninput="app.updateEnemyStat('str', this.value)"></div>
+                                <div><div style="display: flex; justify-content: space-between;">DEF <span id="enemy-def">50</span></div>
+                                <input type="range" min="0" max="100" value="50" style="width: 100%;" oninput="app.updateEnemyStat('def', this.value)"></div>
+                                <div><div style="display: flex; justify-content: space-between;">DEX <span id="enemy-dex">50</span></div>
+                                <input type="range" min="0" max="100" value="50" style="width: 100%;" oninput="app.updateEnemyStat('dex', this.value)"></div>
+                                <div><div style="display: flex; justify-content: space-between;">FRT <span id="enemy-frt">50</span></div>
+                                <input type="range" min="0" max="100" value="50" style="width: 100%;" oninput="app.updateEnemyStat('frt', this.value)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="app.run3v3Battle()" class="btn btn-primary">⚔️ SIMULATE BATTLE</button>
+                    <button onclick="app.resetBattle()" class="btn btn-outline">⟲ RESET TEAM</button>
+                </div>
+                
+                <div id="battle-result" class="hidden" style="margin-top: 24px;"></div>
+            </div>
+        </div>
 
+        <div id="contest-mode" class="hidden">
+            <div class="glass-panel">
+                <div class="section-title">
+                    <div class="accent" style="background: var(--moku-gold);"></div>
+                    <span>🏆 GRAND ARENA LINEUP <span class="mock-badge" style="margin-left: 10px;"></span>mXP & SYNERGY LOGIC</span>
+                </div>
+                
+                <div class="slots-grid">
+                    <div class="slot" id="contest-slot1" onclick="app.openContestPicker(1)">
+                        <div class="slot-content">MOKI 1</div>
+                        <button class="cancel-btn" onclick="app.cancelContestSlot(1, event)">✕</button>
+                    </div>
+                    <div class="slot" id="contest-slot2" onclick="app.openContestPicker(2)">
+                        <div class="slot-content">MOKI 2</div>
+                        <button class="cancel-btn" onclick="app.cancelContestSlot(2, event)">✕</button>
+                    </div>
+                    <div class="slot" id="contest-slot3" onclick="app.openContestPicker(3)">
+                        <div class="slot-content">MOKI 3</div>
+                        <button class="cancel-btn" onclick="app.cancelContestSlot(3, event)">✕</button>
+                    </div>
+                    <div class="slot" id="contest-slot4" onclick="app.openContestPicker(4)">
+                        <div class="slot-content">MOKI 4</div>
+                        <button class="cancel-btn" onclick="app.cancelContestSlot(4, event)">✕</button>
+                    </div>
+                    <div class="slot" id="contest-slot-scheme" onclick="app.openSchemePicker()">
+                        <div class="slot-content">SCHEME</div>
+                        <button class="cancel-btn" onclick="app.cancelScheme(event)">✕</button>
+                    </div>
+                </div>
             
-            <section id="scout-section" class="content-section hidden">
-                <div class="text-[10px] text-cyan-600 mb-4 uppercase tracking-widest border border-cyan-900/30 p-3 text-center bg-black/50">
-                    🌟 14-DAY SNAPSHOT TRACKER
+                <div style="background: #1A1A28; border-radius: 24px; padding: 24px; margin: 24px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <span style="font-size: 20px; font-weight: 700; color: var(--moku-cyan);">LINEUP SYNERGY</span>
+                        <span style="font-size: 36px; font-weight: 800; color: var(--moku-cyan);" id="synergy-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="synergy-bar" style="width: 0%"></div>
+                    </div>
+                    <div id="synergy-desc" style="margin-top: 16px; font-size: 14px; color: #AAA;"></div>
+                    <div style="margin-top: 12px; font-size: 13px; color: #666;" class="tooltip">
+                        🤔 What is synergy? <span class="tooltip-text">Synergy measures how well your 4 Moki work together: 70% class diversity + 30% stat balance. Higher synergy = better contest performance.</span>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-[11px] font-mono border border-cyan-900/30">
-                        <thead class="bg-cyan-950/40 text-cyan-500 uppercase text-[9px]">
-                            <tr><th class="p-4">Genesis Moki</th><th class="p-4">SPD</th><th class="p-4">Current ★</th><th class="p-4 text-right">Analysis</th></tr>
-                        </thead>
-                        <tbody id="scout-body" class="text-white"></tbody>
-                    </table>
+                
+                <div style="background: #1A1A28; border-radius: 24px; padding: 24px; margin: 24px 0;">
+                    <div style="font-size: 14px; color: #888; margin-bottom: 8px;">🎯 RECOMMENDED SCHEME</div>
+                    <div style="font-size: 28px; font-weight: 800; color: var(--moku-gold);" id="rec-scheme">—</div>
+                    <div style="font-size: 14px; color: #AAA; margin-top: 8px;" id="rec-reason"></div>
                 </div>
-                <div class="text-[8px] text-cyan-700 mt-4 text-center italic">* SLEEPER = 1-3★ with 80+ SPD • Buy before snapshot</div>
-            </section>
-        </main>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                    <div style="background: #1A1A28; border-radius: 24px; padding: 24px;">
+                        <div style="font-size: 14px; color: #888;">📈 ESTIMATED mXP <span class="mock-badge" style="margin-left: 8px;"></span></div>
+                        <div style="font-size: 40px; font-weight: 800; color: var(--moku-cyan);" id="est-mxp">0</div>
+                    </div>
+                    <div style="background: #1A1A28; border-radius: 24px; padding: 24px;">
+                        <div style="font-size: 14px; color: #888;">🏆 PROJECTED RANK</div>
+                        <div style="font-size: 40px; font-weight: 800; color: var(--moku-gold);" id="est-rank">—</div>
+                    </div>
+                </div>
+                
+                
+                <div class="matchup-explainer">
+                    <strong>🔍 HOW MATCHUP SCOUT WORKS:</strong> It compares <strong>ALL 4 of your Moki</strong> against each Top Champion. 
+                    Green = your lineup has class advantage against this Champion. 
+                    Red = this Champion's class counters your lineup.
+                    Click any Champion card for detailed analysis.
+                </div>
+                
+            
+                <div style="background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,212,255,0.15)); border-radius: 24px; padding: 24px; margin: 24px 0; border: 1px solid var(--moku-purple);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                        <span style="font-size: 24px;">🔍</span>
+                        <span style="font-size: 20px; font-weight: 700;">MATCHUP SCOUT</span>
+                        <span class="mock-badge" style="margin-left: auto;">CLASS LOGIC</span>
+                        <span class="tooltip" style="margin-left: 4px;">ⓘ <span class="tooltip-text">Analyzes your FULL 4-Moki lineup against each Top Champion. Green = you counter them, Red = they counter you.</span></span>
+                    </div>
+                    
+                    <div id="matchup-analysis" style="min-height: 120px;">
+                        <div style="color: #888; text-align: center; padding: 20px;">Select 4 Moki to see how your FULL lineup matches up against Top Champions</div>
+                    </div>
+                    
+                    <button onclick="app.analyzeMatchups()" class="btn btn-secondary" style="margin-top: 16px; width: 100%;">🔍 ANALYZE MATCHUPS</button>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="app.analyzeLineup()" class="btn btn-primary"> ANALYZE LINEUP</button>
+                    <button onclick="app.resetContest()" class="btn btn-outline">⟲ RESET LINEUP</button>
+                </div>
+                
+                <div style="margin-top: 16px; font-size: 13px; color: #666; text-align: center;">
+                    <span class="tooltip">💡 Pro tip: <span class="tooltip-text">"ANALYZE LINEUP" updates synergy AND matchups in one click. "ANALYZE MATCHUPS" only updates matchups.</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="team-picker" class="hidden glass-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span style="font-size: 20px; font-weight: 700; color: var(--moku-purple);">SELECT MOKI FOR BATTLE</span>
+                <button onclick="app.closeTeamPicker()" style="background: none; border: none; color: #888; font-size: 28px; cursor: pointer;">✕</button>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;" id="team-picker-grid"></div>
+        </div>
+
+        <div id="contest-picker" class="hidden glass-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span style="font-size: 20px; font-weight: 700; color: var(--moku-purple);">SELECT MOKI FOR LINEUP</span>
+                <button onclick="app.closeContestPicker()" style="background: none; border: none; color: #888; font-size: 28px; cursor: pointer;">✕</button>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;" id="contest-picker-grid"></div>
+        </div>
+
+        <div id="scheme-picker" class="hidden glass-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span style="font-size: 20px; font-weight: 700; color: var(--moku-purple);">SELECT SCHEME</span>
+                <button onclick="app.closeSchemePicker()" style="background: none; border: none; color: #888; font-size: 28px; cursor: pointer;">✕</button>
+            </div>
+            <div class="grid" style="gap: 12px;" id="scheme-picker-grid"></div>
+        </div>
+
+        
+        <div style="text-align: center; font-size: 13px; color: #444; margin-top: 48px; padding: 24px 0;">
+            <span>MOKU GRAND ARENA TERMINAL</span><br>
+            <span style="color: #666;">Built for the community by Jay • Click the tanuki for tips!</span>
+        </div>
     </div>
-<script src="script.js"></script>
+    <script src="script.js"><script/>
 </body>
 </html>
