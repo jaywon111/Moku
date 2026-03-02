@@ -3,13 +3,536 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>MOKU GRAND ARENA TERMINAL</title>
-    <link href="style.css" rel="stylesheet">
+    <title>MOKU GRAND ARENA TERMINAL // ULTIMATE</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        :root {
+            --moku-bg: #0B0E17;
+            --moku-purple: #7C3AED;
+            --moku-purple-light: #9F67FF;
+            --moku-cyan: #00D4FF;
+            --moku-cyan-light: #6BE4FF;
+            --moku-pink: #FF007A;
+            --moku-pink-light: #FF4D9E;
+            --moku-gold: #FFD700;
+            --moku-gray: #1E1E2E;
+            --moku-gray-light: #2A2A3A;
+            --moku-text: #FFFFFF;
+            
+            --class-striker: #FF6B6B;
+            --class-bruiser: #FFA726;
+            --class-defender: #4ECDC4;
+            --class-sprinter: #A06CD5;
+            --class-grinder: #66BB6A;
+            --class-forward: #7986CB;
+            
+            --toast-success: #10B981;
+            --toast-error: #EF4444;
+            --toast-warning: #F59E0B;
+            --toast-info: #3B82F6;
+            
+            --matchup-good: #4CAF50;
+            --matchup-bad: #F44336;
+            --matchup-neutral: #FFD700;
+        }
+        
+        body { 
+            background: var(--moku-bg); 
+            color: var(--moku-text); 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 12px 10px;
+        }
+        
+        @media (min-width: 480px) { .container { padding: 16px; } }
+        @media (min-width: 768px) { .container { padding: 20px 24px; } }
+        @media (min-width: 1024px) { .container { padding: 24px 32px; } }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%,100%{transform:translateX(0);}
+            33%{transform:translateX(-6px);}
+            66%{transform:translateX(6px);}
+        }
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+        @keyframes twinkle { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:1;transform:scale(1.2);filter:drop-shadow(0 0 5px gold);} }
+        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .mascot-float {
+            animation: float 4s ease-in-out infinite;
+            width: 70px; height: 70px;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) { .mascot-float { width: 90px; height: 90px; } }
+        
+        .eye-twinkle { animation: twinkle 2.5s ease-in-out infinite; }
+        
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: var(--moku-gray);
+            border-left: 4px solid var(--toast-success);
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            pointer-events: auto;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .toast.error { border-left-color: var(--toast-error); }
+        .toast.warning { border-left-color: var(--toast-warning); }
+        .toast.success { border-left-color: var(--toast-success); }
+        .toast.info { border-left-color: var(--toast-info); }
+        
+        /* ===== GLASS PANELS ===== */
+        .glass-panel {
+            background: rgba(30, 30, 46, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        @media (min-width: 768px) { .glass-panel { border-radius: 28px; padding: 24px; margin-bottom: 24px; } }
+        
+        .header-mascot {
+            display: flex; align-items: center; gap: 12px;
+            background: linear-gradient(135deg, rgba(124,58,237,0.2), transparent);
+            border-radius: 30px;
+            padding: 16px;
+        }
+        @media (min-width: 768px) { .header-mascot { gap: 28px; border-radius: 40px; padding: 20px 24px; } }
+        
+        .speech-bubble {
+            background: linear-gradient(135deg, var(--moku-purple), var(--moku-purple-light));
+            border-radius: 30px 30px 30px 8px;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 13px;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            flex: 1;
+            word-wrap: break-word;
+            animation: pulse 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        @media (min-width: 480px) { .speech-bubble { font-size: 14px; padding: 12px 18px; } }
+        @media (min-width: 768px) { .speech-bubble { font-size: 18px; padding: 16px 24px; border-radius: 40px 40px 40px 8px; } }
+        
+        .speech-bubble:after {
+            content: ''; position: absolute; left: 20px; bottom: -10px;
+            border-left: 10px solid transparent; border-right: 10px solid transparent;
+            border-top: 10px solid var(--moku-purple);
+        }
+        @media (min-width: 768px) { .speech-bubble:after { left: 30px; bottom: -14px; border-width: 14px; } }
+        
+        /* ===== COMMAND CENTER ===== */
+        .command-center {
+            background: rgba(20,20,30,0.95);
+            border: 1px solid rgba(124,58,237,0.4);
+            border-radius: 20px;
+            padding: 16px;
+        }
+        @media (min-width: 768px) { .command-center { border-radius: 28px; padding: 24px; } }
+        
+        .terminal-output {
+            height: 80px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--moku-cyan);
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 12px;
+            scroll-behavior: smooth;
+        }
+        @media (min-width: 768px) { .terminal-output { height: 100px; font-size: 14px; padding: 14px; border-radius: 16px; } }
+        
+        .terminal-output::-webkit-scrollbar { width: 4px; }
+        .terminal-output::-webkit-scrollbar-track { background: var(--moku-gray); border-radius: 2px; }
+        .terminal-output::-webkit-scrollbar-thumb { background: var(--moku-purple); border-radius: 2px; }
+        
+        .command-input {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            border-radius: 40px;
+            padding: 8px 16px;
+        }
+        @media (min-width: 768px) { .command-input { gap: 14px; padding: 10px 20px; } }
+        
+        .command-prompt {
+            color: var(--moku-pink);
+            font-weight: 700;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) { .command-prompt { font-size: 18px; } }
+        
+        .command-input input {
+            background: transparent; border: none; outline: none; width: 100%;
+            color: white; font-size: 13px; padding: 6px 0;
+        }
+        @media (min-width: 768px) { .command-input input { font-size: 16px; padding: 8px 0; } }
+        
+        /* ===== SECTION TITLES ===== */
+        .section-title {
+            font-size: 16px; font-weight: 800; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        @media (min-width: 768px) { .section-title { font-size: 20px; margin-bottom: 24px; gap: 12px; } }
+        
+        .section-title .accent {
+            width: 4px; height: 20px;
+            background: linear-gradient(180deg, var(--moku-purple), var(--moku-cyan));
+            border-radius: 2px;
+        }
+        @media (min-width: 768px) { .section-title .accent { width: 6px; height: 28px; } }
+        
+        /* ===== TOGGLE HEADER ===== */
+        .toggle-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+        }
+        
+        .toggle-btn {
+            background: rgba(124,58,237,0.1);
+            border: 1px solid var(--moku-purple);
+            color: var(--moku-purple);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        @media (min-width: 768px) { .toggle-btn { padding: 10px 24px; font-size: 14px; } }
+        
+        .toggle-btn .arrow { transition: transform 0.3s ease; font-size: 10px; }
+        
+        /* ===== GRIDS ===== */
+        .grid-auto {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            width: 100%;
+        }
+        @media (min-width: 480px) { .grid-auto { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; } }
+        
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+            width: 100%;
+        }
+        @media (min-width: 480px) { .slots-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 768px) { .slots-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+        
+        .champion-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        @media (min-width: 480px) { .champion-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 768px) { .champion-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin: 8px 0;
+        }
+        
+        /* ===== TOOLTIPS ===== */
+        .tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--moku-cyan);
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background: var(--moku-gray);
+            color: var(--moku-cyan);
+            border: 1px solid var(--moku-purple);
+            border-radius: 12px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: normal;
+            text-align: left;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* ===== MOKI CARDS ===== */
+        .moki-card {
+            background: linear-gradient(145deg, var(--moku-gray), #1A1A28);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+        }
+        @media (min-width: 768px) { .moki-card { border-radius: 24px; padding: 20px; } }
+        
+        .moki-card:hover {
+            border-color: var(--moku-cyan);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,212,255,0.15);
+        }
+        
+        .class-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+        @media (min-width: 768px) { .class-badge { padding: 6px 14px; font-size: 12px; } }
+        
+        .class-striker { background: rgba(255,107,107,0.15); color: var(--class-striker); border: 1px solid var(--class-striker); }
+        .class-bruiser { background: rgba(255,167,38,0.15); color: var(--class-bruiser); border: 1px solid var(--class-bruiser); }
+        .class-defender { background: rgba(78,205,196,0.15); color: var(--class-defender); border: 1px solid var(--class-defender); }
+        .class-sprinter { background: rgba(160,108,213,0.15); color: var(--class-sprinter); border: 1px solid var(--class-sprinter); }
+        .class-grinder { background: rgba(102,187,106,0.15); color: var(--class-grinder); border: 1px solid var(--class-grinder); }
+        .class-forward { background: rgba(121,134,203,0.15); color: var(--class-forward); border: 1px solid var(--class-forward); }
+        
+        /* ===== SLOTS ===== */
+        .slot {
+            background: rgba(30,30,46,0.6);
+            border: 2px dashed var(--moku-purple);
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            font-size: 12px;
+        }
+        @media (min-width: 768px) { .slot { border-radius: 24px; padding: 24px 12px; min-height: 120px; font-size: 14px; } }
+        
+        .slot.filled { border: 2px solid var(--moku-cyan); background: rgba(0,212,255,0.08); }
+        
+        .cancel-btn {
+            position: absolute; top: -8px; right: -8px;
+            width: 24px; height: 24px;
+            background: var(--moku-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(255,0,122,0.5);
+            z-index: 10;
+        }
+        .slot.filled:hover .cancel-btn { display: flex; }
+        .cancel-btn:hover { background: var(--moku-pink-light); transform: scale(1.1); }
+        
+        /* ===== BUTTONS ===== */
+        .button-group {
+            display: flex; flex-direction: column; gap: 10px;
+            margin: 16px 0 8px;
+            width: 100%;
+        }
+        @media (min-width: 480px) { .button-group { flex-direction: row; } }
+        
+        .btn {
+            border: none; border-radius: 40px; padding: 14px 20px;
+            font-weight: 700; font-size: 14px;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        @media (min-width: 480px) { .btn { width: auto; flex: 1; } }
+        @media (min-width: 768px) { .btn { padding: 16px 36px; font-size: 16px; } }
+        
+        .btn-primary { background: linear-gradient(135deg, var(--moku-purple), var(--moku-purple-light)); color: white; }
+        .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 8px 0 rgba(0,0,0,0.2); }
+        .btn-secondary { background: linear-gradient(135deg, var(--moku-cyan), var(--moku-cyan-light)); color: #0B0E17; }
+        .btn-outline { background: transparent; border: 2px solid var(--moku-purple); color: var(--moku-purple); box-shadow: none; }
+        .btn-outline:hover { background: rgba(124,58,237,0.1); transform: translateY(-4px); }
+        
+        /* ===== PROGRESS ===== */
+        .progress-bar {
+            width: 100%; height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--moku-purple), var(--moku-cyan));
+            transition: width 0.3s ease;
+        }
+        
+        /* ===== CHAMPION CARDS ===== */
+        .champion-card {
+            background: linear-gradient(145deg, #1A1A28, #0F0F18);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .champion-card:hover { border-color: var(--moku-gold); transform: translateY(-4px); }
+        .champion-rank { color: var(--moku-gold); font-weight: 800; font-size: 14px; }
+        
+        /* ===== MODE TOGGLE ===== */
+        .mode-toggle {
+            display: flex;
+            background: var(--moku-gray);
+            border-radius: 50px;
+            padding: 4px;
+            width: 100%;
+            max-width: 400px;
+            margin: 16px auto 20px;
+            border: 1px solid #333;
+        }
+        .mode-toggle button {
+            flex: 1; padding: 10px 12px; border-radius: 50px;
+            border: none; background: transparent;
+            color: #888; font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: all 0.2s;
+            white-space: nowrap;
+        }
+        @media (min-width: 480px) { .mode-toggle button { padding: 12px 20px; font-size: 14px; } }
+        @media (min-width: 768px) { .mode-toggle button { padding: 14px 40px; font-size: 16px; } }
+        
+        /* ===== MODAL BACKDROP & PICKERS ===== */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-backdrop.active {
+            display: flex;
+        }
+        
+        .modal-picker {
+            background: var(--moku-gray);
+            border: 2px solid var(--moku-purple);
+            border-radius: 32px;
+            padding: 24px;
+            max-width: 90vw;
+            max-height: 80vh;
+            width: 600px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .modal-picker .close-btn {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: var(--moku-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(255,0,122,0.5);
+        }
+        
+        .modal-picker .close-btn:hover {
+            background: var(--moku-pink-light);
+            transform: scale(1.1);
+        }
+        
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .w-full { width: 100%; }
+        .mt-2 { margin-top: 8px; }
+        .mt-4 { margin-top: 16px; }
+        .mb-2 { margin-bottom: 8px; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-2 { gap: 8px; }
+        .justify-between { justify-content: space-between; }
+    </style>
 </head>
 <body>
+    <!-- Toast container for notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
     <div class="container">
-        
+        <!-- ===== TALKING MASCOT ===== -->
         <div class="glass-panel header-mascot">
             <div class="mascot-float" onclick="app.nextTip()">
                 <svg viewBox="0 0 200 200" width="100%" height="100%">
@@ -47,12 +570,12 @@
             </div>
         </div>
 
-        
+        <!-- ===== COMMAND CENTER ===== -->
         <div class="command-center">
             <div id="terminal-output" class="terminal-output">
-                <div>> MOKU TERMINAL by Jay</div>
+                <div>> MOKU TERMINAL v14.0 // ULTIMATE</div>
                 <div>> TYPE 'help' FOR COMMANDS</div>
-                <div>> Start fresh, add your own Moki!</div>
+                <div>> 🔥 Matchup Scout gives smart advice on your lineup!</div>
             </div>
             <div class="command-input">
                 <span class="command-prompt">⤚</span>
@@ -60,11 +583,13 @@
             </div>
         </div>
 
+        <!-- ===== MOKI LOCKER (EMPTY ON FIRST VISIT) ===== -->
         <div class="glass-panel">
             <div class="toggle-header">
                 <div class="section-title" style="margin-bottom:0;">
                     <div class="accent"></div>
-                    <span>MY MOKI LOCKER 🔒</span>
+                    <span>🔒 MY MOKI LOCKER</span>
+                    <span class="tooltip">ⓘ<span class="tooltip-text">Store your Moki here. Add them manually — they'll be saved in your browser. Click any card to use in BATTLE or CONTEST.</span></span>
                 </div>
                 <button id="locker-toggle" class="toggle-btn" onclick="app.toggleLocker()">
                     <span class="arrow">▼</span> <span class="hide-mobile">CLOSE</span>
@@ -89,12 +614,13 @@
             </div>
         </div>
 
-        
+        <!-- ===== CHAMPION LEADERBOARD (FULL 20) ===== -->
         <div class="glass-panel">
             <div class="toggle-header">
                 <div class="section-title" style="margin-bottom:0;">
                     <div class="accent" style="background:var(--moku-gold);"></div>
-                    <span>CHAMPION LEADERBOARD 🏆 (TOP 20)</span>
+                    <span>🏆 CHAMPION LEADERBOARD (TOP 20)</span>
+                    <span class="tooltip">ⓘ<span class="tooltip-text">Current top-performing Moki. Click any Champion to analyze how your lineup matches up against them. Green = good matchup, red = bad.</span></span>
                 </div>
                 <button id="leaderboard-toggle" class="toggle-btn" onclick="app.toggleLeaderboard()">
                     <span class="arrow">▼</span> <span class="hide-mobile">CLOSE</span>
@@ -109,6 +635,7 @@
             </div>
         </div>
 
+        <!-- ===== MODE TOGGLE ===== -->
         <div class="mode-toggle">
             <button id="mode-classic" class="active" onclick="app.setMode('classic')">⚔️ BATTLE</button>
             <button id="mode-contest" onclick="app.setMode('contest')">🏆 CONTEST</button>
@@ -120,13 +647,15 @@
                 <div class="section-title">
                     <div class="accent" style="background:var(--moku-cyan);"></div>
                     <span>⚔️ 3V3 BATTLE</span>
+                    <span class="tooltip">ⓘ<span class="tooltip-text">Test your Moki against any opponent. Select YOUR TEAM from locker, adjust ENEMY stats, then simulate. Win probability based on weighted stats (SPD x1.5 priority).</span></span>
                 </div>
                 
                 <div style="display:flex; flex-direction:column; gap:24px;">
-                    <!-- User's TEAM -->
+                    <!-- YOUR TEAM -->
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <span style="font-size:16px; font-weight:700; color:var(--moku-cyan);">YOUR TEAM</span>
+                            <span class="tooltip">ⓘ<span class="tooltip-text">Click slots to select Moki from your locker. Empty slots are fine — they'll be filled with default stats.</span></span>
                         </div>
                         <div class="slots-grid">
                             <div class="slot" id="my-team-slot1" onclick="app.openTeamPicker(1)">SLOT 1<button class="cancel-btn" onclick="app.cancelTeamSlot(1, event)">✕</button></div>
@@ -136,10 +665,11 @@
                         <div id="my-team-power" class="text-center mt-2" style="font-size:13px; color:#888;"></div>
                     </div>
                     
-                    <!-- ENEMY TEAM  -->
+                    <!-- ENEMY TEAM WITH FULL TWEAKS AND TOOLTIPS -->
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <span style="font-size:16px; font-weight:700; color:var(--moku-pink);">ENEMY TEAM</span>
+                            <span class="tooltip">ⓘ<span class="tooltip-text">Adjust each stat to simulate any opponent. All 3 enemies share these average stats. Hover each stat for details.</span></span>
                         </div>
                         <div class="slots-grid mb-3">
                             <div class="slot filled">ENEMY 1</div>
@@ -150,37 +680,47 @@
                         <div style="background:#1A1A28; border-radius:16px; padding:16px;">
                             <div style="font-size:13px; color:#888; margin-bottom:12px;">ENEMY STATS (ADJUST EACH)</div>
                             
-                            
+                            <!-- SPD with tooltip -->
                             <div class="flex justify-between items-center mb-1">
-                                <span class="tooltip">SPD <span style="font-size:10px; color:#666;">(movement speed)</span></span>
+                                <span class="tooltip">SPD <span style="font-size:10px; color:#666;">(movement speed)</span>
+                                    <span class="tooltip-text">Normal movement speed on ground and in air. Weighted x1.5 in battle calculation.</span>
+                                </span>
                                 <span id="enemy-spd" style="color:var(--moku-cyan); font-weight:700;">50</span>
                             </div>
                             <input type="range" min="0" max="100" value="50" class="w-full mb-3" oninput="app.updateEnemyStat('spd', this.value)">
                             
-                            
+                            <!-- STR with tooltip -->
                             <div class="flex justify-between items-center mb-1">
-                                <span>STR <span style="font-size:10px; color:#666;">(buff form speed)</span></span>
+                                <span class="tooltip">STR <span style="font-size:10px; color:#666;">(buff form speed)</span>
+                                    <span class="tooltip-text">Movement speed while in Buff form. Weighted x1.2.</span>
+                                </span>
                                 <span id="enemy-str" style="color:var(--moku-cyan); font-weight:700;">50</span>
                             </div>
                             <input type="range" min="0" max="100" value="50" class="w-full mb-3" oninput="app.updateEnemyStat('str', this.value)">
                             
-                            
+                            <!-- DEF with tooltip -->
                             <div class="flex justify-between items-center mb-1">
-                                <span>DEF <span style="font-size:10px; color:#666;">(wart riding)</span></span>
+                                <span class="tooltip">DEF <span style="font-size:10px; color:#666;">(wart riding)</span>
+                                    <span class="tooltip-text">Affects Wart riding speed and time to transform. Weighted x1.1.</span>
+                                </span>
                                 <span id="enemy-def" style="color:var(--moku-cyan); font-weight:700;">50</span>
                             </div>
                             <input type="range" min="0" max="100" value="50" class="w-full mb-3" oninput="app.updateEnemyStat('def', this.value)">
                             
-                            
+                            <!-- DEX with tooltip -->
                             <div class="flex justify-between items-center mb-1">
-                                <span>DEX <span style="font-size:10px; color:#666;">(gacha carry speed)</span></span>
+                                <span class="tooltip">DEX <span style="font-size:10px; color:#666;">(gacha carry speed)</span>
+                                    <span class="tooltip-text">Movement speed while carrying a Gacha Ball. Weighted x0.8.</span>
+                                </span>
                                 <span id="enemy-dex" style="color:var(--moku-cyan); font-weight:700;">50</span>
                             </div>
                             <input type="range" min="0" max="100" value="50" class="w-full mb-3" oninput="app.updateEnemyStat('dex', this.value)">
                             
-                            
+                            <!-- FRT with tooltip -->
                             <div class="flex justify-between items-center mb-1">
-                                <span>FRT <span style="font-size:10px; color:#666;">(respawn time)</span></span>
+                                <span class="tooltip">FRT <span style="font-size:10px; color:#666;">(respawn time)</span>
+                                    <span class="tooltip-text">Affects respawn time and Gacha Ball deposit time. Weighted x1.0.</span>
+                                </span>
                                 <span id="enemy-frt" style="color:var(--moku-cyan); font-weight:700;">50</span>
                             </div>
                             <input type="range" min="0" max="100" value="50" class="w-full" oninput="app.updateEnemyStat('frt', this.value)">
@@ -191,6 +731,7 @@
                 <div class="button-group">
                     <button onclick="app.run3v3Battle()" class="btn btn-primary">⚔️ SIMULATE</button>
                     <button onclick="app.resetBattle()" class="btn btn-outline">⟲ RESET</button>
+                    <button onclick="app.downloadBattleReport()" class="btn btn-secondary">📥 DOWNLOAD REPORT</button>
                 </div>
                 
                 <div id="battle-result" class="hidden mt-4"></div>
@@ -203,6 +744,7 @@
                 <div class="section-title">
                     <div class="accent" style="background:var(--moku-gold);"></div>
                     <span>🏆 GRAND ARENA</span>
+                    <span class="tooltip">ⓘ<span class="tooltip-text">Build your 4 Moki + 1 Scheme lineup for contests. Higher synergy = better performance. Get scheme recommendations based on your team's strengths.</span></span>
                 </div>
                 
                 <div class="slots-grid">
@@ -213,26 +755,28 @@
                     <div class="slot" id="contest-slot-scheme" onclick="app.openSchemePicker()">SCHEME<button class="cancel-btn" onclick="app.cancelScheme(event)">✕</button></div>
                 </div>
                 
-                
+                <!-- SYNERGY with tooltip -->
                 <div style="background:#1A1A28; border-radius:16px; padding:16px; margin:16px 0;">
                     <div class="flex justify-between items-center">
                         <span style="font-weight:700;">SYNERGY</span>
+                        <span class="tooltip">ⓘ<span class="tooltip-text">How well your 4 Moki work together: 70% class diversity + 30% stat balance. Higher synergy = better contest performance.</span></span>
                         <span style="font-size:24px; font-weight:800; color:var(--moku-cyan);" id="synergy-value">0%</span>
                     </div>
                     <div class="progress-bar"><div class="progress-fill" id="synergy-bar" style="width:0%"></div></div>
                     <div id="synergy-desc" style="font-size:12px; color:#AAA; margin-top:8px;"></div>
                 </div>
                 
-                
+                <!-- RECOMMENDED SCHEME -->
                 <div style="background:#1A1A28; border-radius:16px; padding:16px; margin:16px 0;">
                     <div style="font-size:13px; color:#888;">🎯 RECOMMENDED SCHEME</div>
                     <div style="font-size:18px; font-weight:700; color:var(--moku-gold);" id="rec-scheme">—</div>
+                    <div style="font-size:12px; color:#AAA; margin-top:4px;" id="rec-reason"></div>
                 </div>
                 
-                
+                <!-- mXP ESTIMATOR with tooltip -->
                 <div class="stats-grid" style="margin:16px 0;">
                     <div style="background:#1A1A28; padding:12px; border-radius:12px;">
-                        <div style="font-size:11px; color:#888;">mXP</div>
+                        <div style="font-size:11px; color:#888;">mXP <span class="tooltip">ⓘ<span class="tooltip-text">Estimated mXP earnings based on lineup strength. Higher mXP = better prizes.</span></span></div>
                         <div style="font-size:20px; font-weight:700; color:var(--moku-cyan);" id="est-mxp">0</div>
                     </div>
                     <div style="background:#1A1A28; padding:12px; border-radius:12px;">
@@ -241,48 +785,798 @@
                     </div>
                 </div>
                 
-                
+                <!-- MATCHUP SCOUT with full analysis -->
                 <div style="background:linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,212,255,0.15)); border-radius:16px; padding:16px; margin:16px 0;">
                     <div class="flex items-center gap-2 mb-2">
                         <span style="font-size:18px;">🔍</span>
                         <span style="font-weight:700;">MATCHUP SCOUT</span>
+                        <span class="tooltip">ⓘ<span class="tooltip-text">Analyzes your FULL 4-Moki lineup against Top Champions. Green = you have class advantage. Red = they counter you. Also gives synergy advice.</span></span>
                     </div>
-                    <div id="matchup-analysis" style="font-size:12px;">Select 4 Moki to see analysis</div>
-                    <button onclick="app.analyzeMatchups()" class="btn btn-secondary w-full mt-2" style="padding:10px;">ANALYZE</button>
+                    <div id="matchup-analysis" style="font-size:12px; min-height: 60px;">Select 4 Moki to see analysis</div>
+                    <div id="matchup-advice" style="font-size:12px; margin-top:8px; padding:8px; background:rgba(0,0,0,0.3); border-radius:8px;"></div>
+                    <button onclick="app.analyzeMatchups()" class="btn btn-secondary w-full mt-2" style="padding:10px;">🔍 ANALYZE MATCHUPS</button>
                 </div>
                 
                 <div class="button-group">
-                    <button onclick="app.analyzeLineup()" class="btn btn-primary"> ANALYZE</button>
+                    <button onclick="app.analyzeLineup()" class="btn btn-primary">📊 ANALYZE</button>
                     <button onclick="app.resetContest()" class="btn btn-outline">⟲ RESET</button>
+                    <button onclick="app.downloadContestReport()" class="btn btn-secondary">📥 DOWNLOAD REPORT</button>
                 </div>
             </div>
         </div>
 
-        
-        <div id="team-picker" class="hidden glass-panel">
-            <div class="flex justify-between items-center mb-3">
-                <span style="font-weight:700;">SELECT MOKI</span>
-                <button onclick="app.closeTeamPicker()" style="font-size:20px;">✕</button>
+        <!-- ===== MODAL BACKDROP & PICKERS ===== -->
+        <div id="modal-backdrop" class="modal-backdrop" onclick="app.closeAllModals(event)">
+            <div id="team-picker" class="modal-picker" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="app.closeAllModals()">✕</button>
+                <div style="font-size:18px; font-weight:700; margin-bottom:16px;">SELECT MOKI</div>
+                <div class="grid-auto" id="team-picker-grid"></div>
             </div>
-            <div class="grid-auto" id="team-picker-grid"></div>
-        </div>
-
-        <div id="contest-picker" class="hidden glass-panel">
-            <div class="flex justify-between items-center mb-3">
-                <span style="font-weight:700;">SELECT MOKI</span>
-                <button onclick="app.closeContestPicker()" style="font-size:20px;">✕</button>
+            <div id="contest-picker" class="modal-picker" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="app.closeAllModals()">✕</button>
+                <div style="font-size:18px; font-weight:700; margin-bottom:16px;">SELECT MOKI</div>
+                <div class="grid-auto" id="contest-picker-grid"></div>
             </div>
-            <div class="grid-auto" id="contest-picker-grid"></div>
-        </div>
-
-        <div id="scheme-picker" class="hidden glass-panel">
-            <div class="flex justify-between items-center mb-3">
-                <span style="font-weight:700;">SELECT SCHEME</span>
-                <button onclick="app.closeSchemePicker()" style="font-size:20px;">✕</button>
+            <div id="scheme-picker" class="modal-picker" onclick="event.stopPropagation()">
+                <button class="close-btn" onclick="app.closeAllModals()">✕</button>
+                <div style="font-size:18px; font-weight:700; margin-bottom:16px;">SELECT SCHEME</div>
+                <div class="grid" style="gap:8px;" id="scheme-picker-grid"></div>
             </div>
-            <div class="grid" style="gap:8px;" id="scheme-picker-grid"></div>
         </div>
     </div>
-<script src="script.js"></script>
+
+    <script>
+        class MokuTerminal {
+            constructor() {
+                this.mode = 'classic';
+                this.lockerVisible = true;
+                this.leaderboardVisible = true;
+                
+                // EMPTY LOCKER ON FIRST VISIT
+                this.savedMokis = JSON.parse(localStorage.getItem('mokuTerminal')) || [];
+                
+                this.tipIndex = 0;
+                this.tips = [
+                    "👋 WELCOME! Add your Moki to the locker below.",
+                    "📝 Click any Moki card to use it in BATTLE or CONTEST.",
+                    "⚔️ BATTLE MODE: Test 3v3 matchups with adjustable enemies.",
+                    "🏆 CONTEST MODE: Build 4 Moki + 1 Scheme lineups.",
+                    "🔍 MATCHUP SCOUT: See how your lineup stacks vs Champions and get synergy advice.",
+                    "📊 SYNERGY SCORE: Higher = better contest performance.",
+                    "💡 Bruisers don't pair well with other Bruisers — mix classes for better synergy!",
+                    "🎯 SCHEME RECOMMENDATIONS based on your team's highest stat.",
+                    "📈 mXP ESTIMATOR: Predict earnings before entering contests.",
+                    "✨ Your Moki are saved in your browser — they'll be here next time!"
+                ];
+                
+                this.myTeam = [null, null, null];
+                this.enemyStats = { spd: 50, str: 50, def: 50, dex: 50, frt: 50 };
+                this.contestLineup = { 1: null, 2: null, 3: null, 4: null, scheme: null };
+                this.currentPickerSlot = 1;
+                this.currentPickerType = null; // 'team', 'contest', 'scheme'
+                
+                // FULL 20 CHAMPIONS
+                this.champions = [
+                    { rank: 1, name: "#1042", class: "Striker", spd: 98, str: 92, def: 88, dex: 95, frt: 85 },
+                    { rank: 2, name: "#2357", class: "Bruiser", spd: 88, str: 99, def: 90, dex: 82, frt: 88 },
+                    { rank: 3, name: "#3891", class: "Defender", spd: 72, str: 88, def: 99, dex: 75, frt: 94 },
+                    { rank: 4, name: "#4562", class: "Sprinter", spd: 99, str: 78, def: 75, dex: 92, frt: 80 },
+                    { rank: 5, name: "#5738", class: "Grinder", spd: 85, str: 88, def: 92, dex: 88, frt: 97 },
+                    { rank: 6, name: "#6712", class: "Striker", spd: 94, str: 89, def: 82, dex: 91, frt: 83 },
+                    { rank: 7, name: "#8902", class: "Bruiser", spd: 86, str: 96, def: 88, dex: 79, frt: 85 },
+                    { rank: 8, name: "#9034", class: "Defender", spd: 70, str: 82, def: 97, dex: 71, frt: 92 },
+                    { rank: 9, name: "#1123", class: "Sprinter", spd: 97, str: 75, def: 72, dex: 94, frt: 78 },
+                    { rank: 10, name: "#2341", class: "Grinder", spd: 83, str: 85, def: 90, dex: 84, frt: 95 },
+                    { rank: 11, name: "#3456", class: "Striker", spd: 92, str: 88, def: 80, dex: 90, frt: 81 },
+                    { rank: 12, name: "#4567", class: "Bruiser", spd: 84, str: 94, def: 86, dex: 77, frt: 83 },
+                    { rank: 13, name: "#5678", class: "Defender", spd: 68, str: 80, def: 96, dex: 69, frt: 90 },
+                    { rank: 14, name: "#6789", class: "Sprinter", spd: 96, str: 73, def: 70, dex: 93, frt: 76 },
+                    { rank: 15, name: "#7890", class: "Grinder", spd: 81, str: 83, def: 88, dex: 82, frt: 93 },
+                    { rank: 16, name: "#8901", class: "Striker", spd: 90, str: 86, def: 78, dex: 89, frt: 79 },
+                    { rank: 17, name: "#9012", class: "Bruiser", spd: 82, str: 92, def: 84, dex: 75, frt: 81 },
+                    { rank: 18, name: "#0123", class: "Defender", spd: 66, str: 78, def: 95, dex: 67, frt: 88 },
+                    { rank: 19, name: "#1234", class: "Sprinter", spd: 95, str: 71, def: 68, dex: 92, frt: 74 },
+                    { rank: 20, name: "#2345", class: "Grinder", spd: 79, str: 81, def: 86, dex: 80, frt: 92 }
+                ];
+                
+                this.schemes = [
+                    { name: "TAKING A DIVE", rarity: "EPIC", effect: "+150 mXP on loss", desc: "Farm mXP when win rate <30%" },
+                    { name: "SHADOW ARTS", rarity: "RARE", effect: "+10% Team Speed", desc: "Best for high SPD teams" },
+                    { name: "BOUNTY HUNTER", rarity: "LEGENDARY", effect: "2x mXP vs higher rank", desc: "Target stronger opponents" },
+                    { name: "GLASS CANNON", rarity: "RARE", effect: "+50% STR / -50% DEF", desc: "All-in combat strategy" },
+                    { name: "RECYCLE BIN", rarity: "COMMON", effect: "Refund 50 Gems on loss", desc: "Budget farming" },
+                    { name: "DATA BREACH", rarity: "EPIC", effect: "Reveal enemy stats", desc: "Counter sleepers" },
+                    { name: "OVERCLOCK", rarity: "LEGENDARY", effect: "+20% All Stats", desc: "Ultimate multiplier" }
+                ];
+
+                // Class synergy advice mapping
+                this.classAdvice = {
+                    'Striker': { good: ['Defender', 'Grinder'], bad: ['Sprinter', 'Bruiser'] },
+                    'Bruiser': { good: ['Sprinter', 'Striker'], bad: ['Defender', 'Grinder'] },
+                    'Defender': { good: ['Bruiser', 'Striker'], bad: ['Grinder', 'Sprinter'] },
+                    'Sprinter': { good: ['Grinder', 'Defender'], bad: ['Bruiser', 'Striker'] },
+                    'Grinder': { good: ['Sprinter', 'Bruiser'], bad: ['Striker', 'Defender'] },
+                    'Forward': { good: ['any'], bad: [] }
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.renderLocker();
+                this.renderChampions();
+                this.initCLI();
+                this.startTipRotation();
+                
+                document.getElementById('mode-classic').style.background = 'linear-gradient(135deg, var(--moku-purple), var(--moku-purple-light))';
+                document.getElementById('mode-classic').style.color = 'white';
+            }
+
+            // Toast notification system
+            showToast(message, type = 'success', duration = 3000) {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, duration);
+            }
+
+            startTipRotation() {
+                setInterval(() => this.nextTip(), 8000);
+            }
+
+            nextTip() {
+                this.tipIndex = (this.tipIndex + 1) % this.tips.length;
+                document.getElementById('speech-bubble').innerHTML = this.tips[this.tipIndex];
+            }
+
+            toggleLocker() {
+                const content = document.getElementById('locker-content');
+                this.lockerVisible = !this.lockerVisible;
+                content.style.display = this.lockerVisible ? 'block' : 'none';
+                document.getElementById('locker-toggle').innerHTML = 
+                    `<span class="arrow">${this.lockerVisible ? '▼' : '►'}</span> ${this.lockerVisible ? 'CLOSE' : 'OPEN'}`;
+            }
+
+            toggleLeaderboard() {
+                const content = document.getElementById('leaderboard-content');
+                this.leaderboardVisible = !this.leaderboardVisible;
+                content.style.display = this.leaderboardVisible ? 'block' : 'none';
+                document.getElementById('leaderboard-toggle').innerHTML = 
+                    `<span class="arrow">${this.leaderboardVisible ? '▼' : '►'}</span> ${this.leaderboardVisible ? 'CLOSE' : 'OPEN'}`;
+            }
+
+            renderLocker() {
+                const container = document.getElementById('saved-mokis-container');
+                if (!container) return;
+
+                if (this.savedMokis.length === 0) {
+                    container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:30px; color:#666; border:1px dashed #333; border-radius:16px;">Your locker is empty — add your Moki below ✨</div>';
+                    return;
+                }
+
+                container.innerHTML = this.savedMokis.map((m, i) => {
+                    const mokiClass = this.determineClass(m);
+                    return `
+                        <div class="moki-card">
+                            <div class="flex justify-between">
+                                <span style="font-weight:700; color:var(--moku-cyan);">${m.name}</span>
+                                <span class="class-badge class-${mokiClass.toLowerCase()}">${mokiClass}</span>
+                            </div>
+                            <div class="stats-grid" style="margin:8px 0;">
+                                <div class="tooltip">SPD<span class="tooltip-text">Normal movement speed</span></div><div>${m.spd}</div>
+                                <div class="tooltip">STR<span class="tooltip-text">Buff form speed</span></div><div>${m.str}</div>
+                                <div class="tooltip">DEF<span class="tooltip-text">Wart riding speed</span></div><div>${m.def}</div>
+                                <div class="tooltip">DEX<span class="tooltip-text">Gacha carry speed</span></div><div>${m.dex}</div>
+                                <div class="tooltip">FRT<span class="tooltip-text">Respawn time</span></div><div>${m.frt}</div>
+                            </div>
+                            <div style="display:flex; gap:4px;">
+                                <button onclick="app.selectForBattle(${i})" class="btn-outline" style="flex:1; padding:6px;">⚔️</button>
+                                <button onclick="app.selectForContest(${i})" class="btn-outline" style="flex:1; padding:6px;">🏆</button>
+                                <button onclick="app.deleteMoki(${i})" class="btn-outline" style="padding:6px;">✕</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            renderChampions() {
+                const container = document.getElementById('champion-grid');
+                if (!container) return;
+                container.innerHTML = this.champions.map(c => `
+                    <div class="champion-card" onclick="app.analyzeChampionMatchup('${c.name}')">
+                        <div class="champion-rank">#${c.rank}</div>
+                        <div style="font-weight:700;">${c.name}</div>
+                        <div class="class-badge class-${c.class.toLowerCase()}">${c.class}</div>
+                    </div>
+                `).join('');
+            }
+
+            determineClass(m) {
+                const stats = [m.spd, m.str, m.def, m.dex, m.frt];
+                const max = Math.max(...stats);
+                if (m.spd === max) return 'Sprinter';
+                if (m.str === max) return 'Bruiser';
+                if (m.def === max) return 'Defender';
+                if (m.dex === max) return 'Striker';
+                if (m.frt === max) return 'Grinder';
+                return 'Forward';
+            }
+
+            addMoki() {
+                const name = document.getElementById('new-moki-name').value.trim().toUpperCase();
+                if (!name) {
+                    this.showToast('❌ Please enter a MOKI ID', 'error');
+                    return;
+                }
+
+                const moki = {
+                    name: name,
+                    spd: parseInt(document.getElementById('new-moki-spd').value) || 50,
+                    str: parseInt(document.getElementById('new-moki-str').value) || 50,
+                    def: parseInt(document.getElementById('new-moki-def').value) || 50,
+                    dex: parseInt(document.getElementById('new-moki-dex').value) || 50,
+                    frt: parseInt(document.getElementById('new-moki-frt').value) || 50
+                };
+
+                this.savedMokis.push(moki);
+                localStorage.setItem('mokuTerminal', JSON.stringify(this.savedMokis));
+                this.renderLocker();
+                this.showToast(`✅ SAVED: ${moki.name}`, 'success');
+
+                document.getElementById('new-moki-name').value = '';
+                ['spd','str','def','dex','frt'].forEach(s => 
+                    document.getElementById(`new-moki-${s}`).value = 50
+                );
+            }
+
+            deleteMoki(index) {
+                this.savedMokis.splice(index, 1);
+                localStorage.setItem('mokuTerminal', JSON.stringify(this.savedMokis));
+                this.renderLocker();
+                this.showToast('🗑️ MOKI REMOVED', 'warning');
+            }
+
+            // ===== BATTLE MODE =====
+            selectForBattle(index) {
+                const moki = this.savedMokis[index];
+                for (let i = 0; i < 3; i++) {
+                    if (!this.myTeam[i]) {
+                        this.myTeam[i] = moki;
+                        this.updateTeamSlot(i+1, moki);
+                        this.showToast(`⚔️ Added ${moki.name} to your team`, 'success');
+                        break;
+                    }
+                }
+            }
+
+            updateTeamSlot(slot, moki) {
+                const slotEl = document.getElementById(`my-team-slot${slot}`);
+                slotEl.innerHTML = `
+                    <div style="font-weight:700;">${moki.name}</div>
+                    <div style="font-size:9px;">${this.determineClass(moki)}</div>
+                    <button class="cancel-btn" onclick="app.cancelTeamSlot(${slot}, event)">✕</button>
+                `;
+                slotEl.classList.add('filled');
+            }
+
+            cancelTeamSlot(slot, event) {
+                event.stopPropagation();
+                const moki = this.myTeam[slot-1];
+                this.myTeam[slot-1] = null;
+                const slotEl = document.getElementById(`my-team-slot${slot}`);
+                slotEl.innerHTML = `SLOT ${slot}<button class="cancel-btn" onclick="app.cancelTeamSlot(${slot}, event)">✕</button>`;
+                slotEl.classList.remove('filled');
+                if (moki) this.showToast(`❌ Removed ${moki.name}`, 'warning');
+            }
+
+            openTeamPicker(slot) {
+                this.currentPickerSlot = slot;
+                this.currentPickerType = 'team';
+                const grid = document.getElementById('team-picker-grid');
+                grid.innerHTML = this.savedMokis.map((m, i) => `
+                    <div class="moki-card" onclick="app.selectForTeam(${i})">
+                        <div style="font-weight:700;">${m.name}</div>
+                        <div class="class-badge">${this.determineClass(m)}</div>
+                    </div>
+                `).join('');
+                document.getElementById('modal-backdrop').classList.add('active');
+                document.getElementById('team-picker').classList.remove('hidden');
+                document.getElementById('contest-picker').classList.add('hidden');
+                document.getElementById('scheme-picker').classList.add('hidden');
+            }
+
+            selectForTeam(index) {
+                const moki = this.savedMokis[index];
+                this.myTeam[this.currentPickerSlot-1] = moki;
+                this.updateTeamSlot(this.currentPickerSlot, moki);
+                this.closeAllModals();
+                this.showToast(`⚔️ Added ${moki.name} to your team`, 'success');
+            }
+
+            // ===== CONTEST MODE =====
+            selectForContest(index) {
+                const moki = this.savedMokis[index];
+                for (let i = 1; i <= 4; i++) {
+                    if (!this.contestLineup[i]) {
+                        this.contestLineup[i] = moki;
+                        this.updateContestSlot(i, moki);
+                        this.updateSynergy();
+                        this.showToast(`🏆 Added ${moki.name} to lineup`, 'success');
+                        break;
+                    }
+                }
+            }
+
+            updateContestSlot(slot, moki) {
+                const slotEl = document.getElementById(`contest-slot${slot}`);
+                slotEl.innerHTML = `
+                    <div style="font-weight:700;">${moki.name}</div>
+                    <div style="font-size:9px;">${this.determineClass(moki)}</div>
+                    <button class="cancel-btn" onclick="app.cancelContestSlot(${slot}, event)">✕</button>
+                `;
+                slotEl.classList.add('filled');
+            }
+
+            cancelContestSlot(slot, event) {
+                event.stopPropagation();
+                const moki = this.contestLineup[slot];
+                this.contestLineup[slot] = null;
+                const slotEl = document.getElementById(`contest-slot${slot}`);
+                slotEl.innerHTML = `MOKI ${slot}<button class="cancel-btn" onclick="app.cancelContestSlot(${slot}, event)">✕</button>`;
+                slotEl.classList.remove('filled');
+                this.updateSynergy();
+                if (moki) this.showToast(`❌ Removed ${moki.name}`, 'warning');
+            }
+
+            cancelScheme(event) {
+                event.stopPropagation();
+                this.contestLineup.scheme = null;
+                const slotEl = document.getElementById('contest-slot-scheme');
+                slotEl.innerHTML = 'SCHEME<button class="cancel-btn" onclick="app.cancelScheme(event)">✕</button>';
+                slotEl.classList.remove('filled');
+                this.updateSynergy();
+                this.showToast('❌ Scheme removed', 'warning');
+            }
+
+            openContestPicker(slot) {
+                this.currentPickerSlot = slot;
+                this.currentPickerType = 'contest';
+                const grid = document.getElementById('contest-picker-grid');
+                grid.innerHTML = this.savedMokis.map((m, i) => `
+                    <div class="moki-card" onclick="app.selectForContestSlot(${i})">
+                        <div style="font-weight:700;">${m.name}</div>
+                        <div class="class-badge">${this.determineClass(m)}</div>
+                    </div>
+                `).join('');
+                document.getElementById('modal-backdrop').classList.add('active');
+                document.getElementById('contest-picker').classList.remove('hidden');
+                document.getElementById('team-picker').classList.add('hidden');
+                document.getElementById('scheme-picker').classList.add('hidden');
+            }
+
+            selectForContestSlot(index) {
+                const moki = this.savedMokis[index];
+                this.contestLineup[this.currentPickerSlot] = moki;
+                this.updateContestSlot(this.currentPickerSlot, moki);
+                this.closeAllModals();
+                this.updateSynergy();
+                this.showToast(`🏆 Added ${moki.name} to lineup`, 'success');
+            }
+
+            openSchemePicker() {
+                this.currentPickerType = 'scheme';
+                const grid = document.getElementById('scheme-picker-grid');
+                grid.innerHTML = this.schemes.map((s, i) => `
+                    <div class="moki-card" onclick="app.selectScheme(${i})">
+                        <div style="font-weight:700; color:var(--moku-gold);">${s.name}</div>
+                        <div style="font-size:11px;">${s.effect}</div>
+                        <div style="font-size:10px; color:#888;">${s.desc}</div>
+                    </div>
+                `).join('');
+                document.getElementById('modal-backdrop').classList.add('active');
+                document.getElementById('scheme-picker').classList.remove('hidden');
+                document.getElementById('team-picker').classList.add('hidden');
+                document.getElementById('contest-picker').classList.add('hidden');
+            }
+
+            selectScheme(index) {
+                const scheme = this.schemes[index];
+                this.contestLineup.scheme = scheme;
+                const slotEl = document.getElementById('contest-slot-scheme');
+                slotEl.innerHTML = `
+                    <div style="font-weight:700; color:var(--moku-gold);">${scheme.name}</div>
+                    <button class="cancel-btn" onclick="app.cancelScheme(event)">✕</button>
+                `;
+                slotEl.classList.add('filled');
+                this.closeAllModals();
+                this.updateSynergy();
+                this.showToast(`🎯 Selected scheme: ${scheme.name}`, 'success');
+            }
+
+            closeAllModals(event) {
+                if (event && event.target.classList.contains('modal-backdrop')) {
+                    // click on backdrop closes
+                } else if (event) {
+                    return;
+                }
+                document.getElementById('modal-backdrop').classList.remove('active');
+                // Hide all pickers
+                document.getElementById('team-picker').classList.add('hidden');
+                document.getElementById('contest-picker').classList.add('hidden');
+                document.getElementById('scheme-picker').classList.add('hidden');
+            }
+
+            updateEnemyStat(stat, val) {
+                this.enemyStats[stat] = parseInt(val);
+                document.getElementById(`enemy-${stat}`).innerText = val;
+            }
+
+            run3v3Battle() {
+                const filled = this.myTeam.filter(m => m).length;
+                if (filled < 3) { 
+                    this.showToast('❌ Need 3 Moki in your team!', 'error');
+                    return; 
+                }
+                
+                const resultDiv = document.getElementById('battle-result');
+                resultDiv.classList.remove('hidden');
+                resultDiv.innerHTML = `
+                    <div style="background:#1A1A28; border-radius:16px; padding:20px; text-align:center;">
+                        <div style="font-size:18px; font-weight:700; background:linear-gradient(90deg, var(--moku-purple), var(--moku-cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">⚡ CALCULATING ⚡</div>
+                        <div style="display:flex; justify-content:center; gap:12px; margin-top:12px;">
+                            <div style="width:12px; height:12px; background:var(--moku-purple); border-radius:50%; animation:pulse 1s infinite;"></div>
+                            <div style="width:12px; height:12px; background:var(--moku-cyan); border-radius:50%; animation:pulse 1s infinite 0.2s;"></div>
+                            <div style="width:12px; height:12px; background:var(--moku-pink); border-radius:50%; animation:pulse 1s infinite 0.4s;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    const myPower = this.myTeam.reduce((sum, m) => {
+                        return sum + (m.spd * 1.5) + (m.str * 1.2) + (m.def * 1.1) + (m.dex * 0.8) + m.frt;
+                    }, 0);
+
+                    const enemyPower = 3 * (
+                        (this.enemyStats.spd * 1.5) + 
+                        (this.enemyStats.str * 1.2) + 
+                        (this.enemyStats.def * 1.1) + 
+                        (this.enemyStats.dex * 0.8) + 
+                        this.enemyStats.frt
+                    );
+
+                    const total = myPower + enemyPower;
+                    const myChance = (myPower / total * 100).toFixed(1);
+                    const enemyChance = (enemyPower / total * 100).toFixed(1);
+                    const winner = myPower > enemyPower ? 'YOUR TEAM' : 'ENEMY';
+                    const winnerColor = myPower > enemyPower ? 'var(--moku-cyan)' : 'var(--moku-pink)';
+
+                    resultDiv.innerHTML = `
+                        <div style="background:#1A1A28; border-radius:16px; padding:20px; text-align:center;">
+                            <div style="font-size:20px; font-weight:700; color:${winnerColor};">${winner} WINS</div>
+                            <div style="display:flex; justify-content:center; gap:20px; margin-top:12px;">
+                                <div><span style="color:var(--moku-cyan);">YOUR</span> ${myChance}%</div>
+                                <div><span style="color:var(--moku-pink);">ENEMY</span> ${enemyChance}%</div>
+                            </div>
+                            <div class="progress-bar mt-2">
+                                <div class="progress-fill" style="width:${myPower/total*100}%"></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.showToast(`⚔️ Battle complete! ${winner} wins`, 'success');
+                    this.print(`> BATTLE RESULT: ${winner} (${myPower > enemyPower ? myChance : enemyChance}%)`);
+                }, 1500);
+            }
+
+            resetBattle() {
+                this.myTeam = [null, null, null];
+                for (let i = 1; i <= 3; i++) {
+                    const slotEl = document.getElementById(`my-team-slot${i}`);
+                    slotEl.innerHTML = `SLOT ${i}<button class="cancel-btn" onclick="app.cancelTeamSlot(${i}, event)">✕</button>`;
+                    slotEl.classList.remove('filled');
+                }
+                document.getElementById('battle-result').classList.add('hidden');
+                this.showToast('⟲ Battle reset', 'warning');
+                this.print("> BATTLE RESET");
+            }
+
+            downloadBattleReport() {
+                const filled = this.myTeam.filter(m => m).length;
+                if (filled < 3) {
+                    this.showToast('❌ Simulate a battle first!', 'error');
+                    return;
+                }
+
+                const teamNames = this.myTeam.map(m => m.name).join(', ');
+                const date = new Date().toLocaleString();
+                const content = `MOKU BATTLE REPORT\nGenerated: ${date}\n\nYOUR TEAM: ${teamNames}\n\nENEMY STATS:\nSPD: ${this.enemyStats.spd}\nSTR: ${this.enemyStats.str}\nDEF: ${this.enemyStats.def}\nDEX: ${this.enemyStats.dex}\nFRT: ${this.enemyStats.frt}\n\n-- Grand Arena Terminal --`;
+                
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Moku_Battle_${Date.now()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showToast('📥 Report downloaded', 'success');
+            }
+
+            // ===== CONTEST MODE SYNERGY =====
+            updateSynergy() {
+                const mokis = [this.contestLineup[1], this.contestLineup[2], this.contestLineup[3], this.contestLineup[4]].filter(m => m);
+                
+                if (mokis.length < 4) {
+                    document.getElementById('synergy-value').innerText = '0%';
+                    document.getElementById('synergy-bar').style.width = '0%';
+                    document.getElementById('synergy-desc').innerText = `Add ${4-mokis.length} more Moki`;
+                    document.getElementById('rec-scheme').innerText = '—';
+                    document.getElementById('rec-reason').innerText = '';
+                    document.getElementById('est-mxp').innerText = '0';
+                    document.getElementById('est-rank').innerText = '—';
+                    document.getElementById('matchup-analysis').innerHTML = 'Select 4 Moki to see analysis';
+                    document.getElementById('matchup-advice').innerHTML = '';
+                    return;
+                }
+
+                const classes = new Set(mokis.map(m => this.determineClass(m))).size;
+                const classScore = (classes / 5) * 70;
+                
+                const avgSpd = mokis.reduce((a, m) => a + m.spd, 0) / 4;
+                const avgStr = mokis.reduce((a, m) => a + m.str, 0) / 4;
+                const avgDef = mokis.reduce((a, m) => a + m.def, 0) / 4;
+                const avgDex = mokis.reduce((a, m) => a + m.dex, 0) / 4;
+                const avgFrt = mokis.reduce((a, m) => a + m.frt, 0) / 4;
+                
+                const statBalance = 30 - (Math.abs(avgSpd - 50) + Math.abs(avgStr - 50) + Math.abs(avgDef - 50) + Math.abs(avgDex - 50) + Math.abs(avgFrt - 50)) / 10;
+                
+                let synergy = classScore + Math.max(0, statBalance);
+                synergy = Math.min(100, synergy);
+                
+                document.getElementById('synergy-value').innerText = Math.round(synergy) + '%';
+                document.getElementById('synergy-bar').style.width = synergy + '%';
+                document.getElementById('synergy-desc').innerText = synergy > 70 ? '🔥 Excellent!' : '✅ Good';
+                
+                const avgs = [avgSpd, avgStr, avgDef, avgDex, avgFrt];
+                const maxIdx = avgs.indexOf(Math.max(...avgs));
+                
+                const schemeMap = {
+                    0: { name: 'SHADOW ARTS', reason: 'Your team has high SPD — use SHADOW ARTS for +10% Speed' },
+                    1: { name: 'GLASS CANNON', reason: 'Your team has high STR — use GLASS CANNON for +50% Strength' },
+                    2: { name: 'RECYCLE BIN', reason: 'Your team has high DEF — use RECYCLE BIN for defensive farming' },
+                    3: { name: 'DATA BREACH', reason: 'Your team has high DEX — use DATA BREACH to reveal enemy stats' },
+                    4: { name: 'OVERCLOCK', reason: 'Your team is balanced — use OVERCLOCK for +20% all stats' }
+                };
+                const rec = schemeMap[maxIdx] || { name: 'OVERCLOCK', reason: 'Your team is balanced' };
+                document.getElementById('rec-scheme').innerText = rec.name;
+                document.getElementById('rec-reason').innerText = rec.reason;
+                
+                const mxp = Math.round(800 + (synergy * 10));
+                document.getElementById('est-mxp').innerText = mxp;
+                
+                if (mxp > 2000) document.getElementById('est-rank').innerText = 'TOP 10%';
+                else if (mxp > 1500) document.getElementById('est-rank').innerText = 'TOP 25%';
+                else if (mxp > 1000) document.getElementById('est-rank').innerText = 'TOP 50%';
+                else document.getElementById('est-rank').innerText = 'BOTTOM 50%';
+                
+                this.analyzeMatchups();
+            }
+
+            analyzeMatchups() {
+                const mokis = [this.contestLineup[1], this.contestLineup[2], this.contestLineup[3], this.contestLineup[4]].filter(m => m);
+                
+                if (mokis.length < 4) {
+                    document.getElementById('matchup-analysis').innerHTML = 'Need 4 Moki to analyze';
+                    document.getElementById('matchup-advice').innerHTML = '';
+                    return;
+                }
+
+                // Get classes of user's lineup
+                const userClasses = mokis.map(m => this.determineClass(m));
+                const topChamps = this.champions.slice(0, 5);
+                
+                let analysisHTML = '<div style="margin-bottom:8px;"><strong>VS TOP 5 CHAMPIONS</strong></div>';
+                let adviceHTML = '<strong>💡 LINEUP ADVICE:</strong> ';
+                
+                // Class diversity advice
+                const uniqueClasses = new Set(userClasses).size;
+                if (uniqueClasses < 3) {
+                    adviceHTML += '⚠️ Low class diversity. ';
+                    if (userClasses.filter(c => c === 'Bruiser').length > 2) {
+                        adviceHTML += 'Multiple Bruisers don\'t work well together — they compete for the same role. ';
+                    }
+                    if (userClasses.filter(c => c === 'Striker').length > 2) {
+                        adviceHTML += 'Multiple Strikers reduce overall effectiveness. ';
+                    }
+                } else {
+                    adviceHTML += '✅ Good class diversity. ';
+                }
+                
+                // Specific class advice
+                if (userClasses.includes('Bruiser') && userClasses.includes('Striker')) {
+                    adviceHTML += 'Bruisers and Strikers have good synergy. ';
+                }
+                if (userClasses.includes('Defender') && userClasses.includes('Grinder')) {
+                    adviceHTML += 'Defenders pair well with Grinders. ';
+                }
+                if (userClasses.includes('Sprinter') && userClasses.includes('Bruiser')) {
+                    adviceHTML += 'Sprinters complement Bruisers. ';
+                }
+                
+                // Champion matchup analysis
+                topChamps.forEach(champ => {
+                    let goodMatchups = 0;
+                    let badMatchups = 0;
+                    
+                    userClasses.forEach(userClass => {
+                        // Class advantage logic
+                        if (
+                            (champ.class === 'Striker' && userClass === 'Defender') ||
+                            (champ.class === 'Defender' && userClass === 'Bruiser') ||
+                            (champ.class === 'Bruiser' && userClass === 'Sprinter') ||
+                            (champ.class === 'Sprinter' && userClass === 'Grinder') ||
+                            (champ.class === 'Grinder' && userClass === 'Striker')
+                        ) {
+                            goodMatchups++;
+                        } else if (
+                            (champ.class === 'Striker' && userClass === 'Sprinter') ||
+                            (champ.class === 'Defender' && userClass === 'Grinder') ||
+                            (champ.class === 'Bruiser' && userClass === 'Striker') ||
+                            (champ.class === 'Sprinter' && userClass === 'Defender') ||
+                            (champ.class === 'Grinder' && userClass === 'Bruiser')
+                        ) {
+                            badMatchups++;
+                        }
+                    });
+                    
+                    const matchupScore = goodMatchups - badMatchups;
+                    let matchupText, matchupColor;
+                    
+                    if (matchupScore >= 2) {
+                        matchupText = '👍 STRONG';
+                        matchupColor = 'var(--matchup-good)';
+                    } else if (matchupScore >= 1) {
+                        matchupText = '👍 GOOD';
+                        matchupColor = 'var(--matchup-good)';
+                    } else if (matchupScore <= -2) {
+                        matchupText = '👎 WEAK';
+                        matchupColor = 'var(--matchup-bad)';
+                    } else if (matchupScore <= -1) {
+                        matchupText = '👎 BAD';
+                        matchupColor = 'var(--matchup-bad)';
+                    } else {
+                        matchupText = '⚖️ EVEN';
+                        matchupColor = 'var(--matchup-neutral)';
+                    }
+                    
+                    analysisHTML += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <span>#${champ.rank} ${champ.name} <span class="class-badge class-${champ.class.toLowerCase()}" style="font-size:8px;">${champ.class}</span></span>
+                            <span style="color:${matchupColor};">${matchupText}</span>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('matchup-analysis').innerHTML = analysisHTML;
+                document.getElementById('matchup-advice').innerHTML = adviceHTML;
+                this.showToast('🔍 Matchup analysis complete', 'info');
+            }
+
+            analyzeLineup() {
+                this.updateSynergy();
+                this.analyzeMatchups();
+                this.showToast('📊 Lineup analysis complete', 'success');
+            }
+
+            resetContest() {
+                for (let i = 1; i <= 4; i++) {
+                    this.contestLineup[i] = null;
+                    const slotEl = document.getElementById(`contest-slot${i}`);
+                    slotEl.innerHTML = `MOKI ${i}<button class="cancel-btn" onclick="app.cancelContestSlot(${i}, event)">✕</button>`;
+                    slotEl.classList.remove('filled');
+                }
+                this.contestLineup.scheme = null;
+                const schemeSlot = document.getElementById('contest-slot-scheme');
+                schemeSlot.innerHTML = 'SCHEME<button class="cancel-btn" onclick="app.cancelScheme(event)">✕</button>';
+                schemeSlot.classList.remove('filled');
+                this.updateSynergy();
+                this.showToast('⟲ Contest reset', 'warning');
+            }
+
+            downloadContestReport() {
+                const mokis = [this.contestLineup[1], this.contestLineup[2], this.contestLineup[3], this.contestLineup[4]].filter(m => m);
+                if (mokis.length < 4) {
+                    this.showToast('❌ Build a full lineup first!', 'error');
+                    return;
+                }
+
+                const teamNames = mokis.map(m => m.name).join(', ');
+                const schemeName = this.contestLineup.scheme ? this.contestLineup.scheme.name : 'None';
+                const synergy = document.getElementById('synergy-value').innerText;
+                const mxp = document.getElementById('est-mxp').innerText;
+                const advice = document.getElementById('matchup-advice').innerText || 'No advice';
+                const date = new Date().toLocaleString();
+                
+                const content = `MOKU CONTEST REPORT\nGenerated: ${date}\n\nLINEUP: ${teamNames}\nSCHEME: ${schemeName}\nSYNERGY: ${synergy}\nESTIMATED mXP: ${mxp}\n\nADVICE: ${advice}\n\n-- Grand Arena Terminal --`;
+                
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Moku_Contest_${Date.now()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showToast('📥 Report downloaded', 'success');
+            }
+
+            analyzeChampionMatchup(name) {
+                this.showToast(`🔍 Analyzing ${name}...`, 'info');
+                this.analyzeMatchups(); // Re-run analysis highlighting this champ
+            }
+
+            setMode(mode) {
+                this.mode = mode;
+                const classic = document.getElementById('mode-classic');
+                const contest = document.getElementById('mode-contest');
+                
+                if (mode === 'classic') {
+                    classic.style.background = 'linear-gradient(135deg, var(--moku-purple), var(--moku-purple-light))';
+                    classic.style.color = 'white';
+                    contest.style.background = 'transparent';
+                    contest.style.color = '#888';
+                    document.getElementById('classic-mode').classList.remove('hidden');
+                    document.getElementById('contest-mode').classList.add('hidden');
+                } else {
+                    contest.style.background = 'linear-gradient(135deg, var(--moku-purple), var(--moku-purple-light))';
+                    contest.style.color = 'white';
+                    classic.style.background = 'transparent';
+                    classic.style.color = '#888';
+                    document.getElementById('contest-mode').classList.remove('hidden');
+                    document.getElementById('classic-mode').classList.add('hidden');
+                }
+                this.showToast(`Switched to ${mode.toUpperCase()} mode`, 'info');
+            }
+
+            initCLI() {
+                document.getElementById('cli-input').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const cmd = e.target.value.toLowerCase().trim();
+                        e.target.value = '';
+                        
+                        const cmds = {
+                            'classic': () => this.setMode('classic'),
+                            'contest': () => this.setMode('contest'),
+                            'locker': () => this.toggleLocker(),
+                            'leaderboard': () => this.toggleLeaderboard(),
+                            'tip': () => this.nextTip(),
+                            'status': () => this.showToast('SEASON 1: $1M POOL • SNAPSHOT IN 4 DAYS', 'info'),
+                            'clear': () => document.getElementById('terminal-output').innerHTML = '',
+                            'help': () => {
+                                this.showToast('Commands: classic, contest, locker, leaderboard, tip, status, clear', 'info');
+                                this.print("> COMMANDS: classic, contest, locker, leaderboard, tip, status, clear");
+                                this.print("> Add Moki → Build lineup → Analyze");
+                            }
+                        };
+                        
+                        cmds[cmd] ? cmds[cmd]() : this.showToast(`❌ Unknown command: ${cmd}`, 'error');
+                    }
+                });
+            }
+
+            print(msg) {
+                const out = document.getElementById('terminal-output');
+                const d = document.createElement('div');
+                d.innerText = msg;
+                out.appendChild(d);
+                out.scrollTop = out.scrollHeight;
+            }
+        }
+
+        const app = new MokuTerminal();
+    </script>
 </body>
 </html>
