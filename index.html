@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>MOKU GRAND ARENA TERMINAL – COMPLETE</title>
+    <title>MOKU GRAND ARENA TERMINAL – FINAL WORKING</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -623,9 +623,9 @@
         <!-- Command center -->
         <div class="command-center">
             <div id="terminal-output" class="terminal-output">
-                <div>> MOKU TERMINAL v17.0 – CUSTOM CONTEST INPUT</div>
+                <div>> MOKU TERMINAL v18.0 – FINAL WORKING</div>
                 <div>> TYPE 'help' FOR COMMANDS</div>
-                <div>> 🔥 Custom prize pool & entries • Battle mode fixed</div>
+                <div>> 🔥 Battle mode fixed • Custom contest inputs • All schemes recommended</div>
             </div>
             <div class="command-input">
                 <span class="command-prompt">⤚</span>
@@ -691,7 +691,7 @@
             <button id="mode-contest" onclick="app.setMode('contest')">🏆 CONTEST</button>
         </div>
 
-        <!-- CLASSIC BATTLE MODE -->
+        <!-- CLASSIC BATTLE MODE (fixed) -->
         <div id="classic-mode">
             <div class="glass-panel">
                 <div class="section-title"><div class="accent" style="background:var(--moku-cyan);"></div><span>⚔️ 3V3 BATTLE</span></div>
@@ -699,9 +699,9 @@
                     <div>
                         <div class="flex justify-between"><span style="color:var(--moku-cyan);">YOUR TEAM</span></div>
                         <div class="slots-grid">
-                            <div class="slot" id="my-team-slot1" onclick="app.openTeamPicker(1)">SLOT 1<button class="cancel-btn" onclick="app.cancelTeamSlot(1,event)">✕</button></div>
-                            <div class="slot" id="my-team-slot2" onclick="app.openTeamPicker(2)">SLOT 2<button class="cancel-btn" onclick="app.cancelTeamSlot(2,event)">✕</button></div>
-                            <div class="slot" id="my-team-slot3" onclick="app.openTeamPicker(3)">SLOT 3<button class="cancel-btn" onclick="app.cancelTeamSlot(3,event)">✕</button></div>
+                            <div class="slot" id="my-team-slot1" onclick="app.openBattlePicker(1)">SLOT 1<button class="cancel-btn" onclick="app.cancelBattleSlot(1,event)">✕</button></div>
+                            <div class="slot" id="my-team-slot2" onclick="app.openBattlePicker(2)">SLOT 2<button class="cancel-btn" onclick="app.cancelBattleSlot(2,event)">✕</button></div>
+                            <div class="slot" id="my-team-slot3" onclick="app.openBattlePicker(3)">SLOT 3<button class="cancel-btn" onclick="app.cancelBattleSlot(3,event)">✕</button></div>
                         </div>
                         <div id="my-team-power" class="text-center mt-2" style="font-size:13px; color:#888;"></div>
                     </div>
@@ -731,7 +731,7 @@
             </div>
         </div>
 
-        <!-- CONTEST MODE with custom inputs -->
+        <!-- CONTEST MODE -->
         <div id="contest-mode" class="hidden">
             <div class="glass-panel">
                 <div class="section-title"><div class="accent" style="background:var(--moku-gold);"></div><span>🏆 GRAND ARENA</span></div>
@@ -777,7 +777,7 @@
                     <div style="font-size:12px; color:#AAA;" id="rec-reason"></div>
                 </div>
 
-                <!-- mXP ESTIMATOR (with real formula) -->
+                <!-- mXP ESTIMATOR -->
                 <div class="stats-grid" style="margin:16px 0;">
                     <div style="background:#1A1A28; padding:12px; border-radius:12px;">
                         <div style="font-size:11px; color:#888;">Entry mXP</div>
@@ -1049,7 +1049,7 @@
                 this.showToast('🗑️ Removed');
             }
 
-            // BATTLE MODE (fixed)
+            // ===== BATTLE MODE (FIXED) =====
             selectForBattle(idx) {
                 const m = this.savedMokis[idx];
                 for (let i=0;i<3;i++) if (!this.myTeam[i]) { this.myTeam[i]=m; this.updateBattleSlot(i+1,m); break; }
@@ -1068,13 +1068,14 @@
             openBattlePicker(slot) {
                 this.currentPickerSlot=slot;
                 const g = document.getElementById('team-picker-grid');
-                g.innerHTML = this.savedMokis.map((m,i)=>`<div class="moki-card" onclick="app.selectForTeam(${i})"><div style="font-weight:700;">${m.name}</div><div class="class-badge">${this.determineClass(m)}</div></div>`).join('');
+                g.innerHTML = this.savedMokis.map((m,i)=>`<div class="moki-card" onclick="app.selectForBattleTeam(${i})"><div style="font-weight:700;">${m.name}</div><div class="class-badge">${this.determineClass(m)}</div></div>`).join('');
                 document.getElementById('modal-backdrop').classList.add('active');
                 document.getElementById('team-picker').classList.remove('hidden');
                 document.getElementById('contest-picker').classList.add('hidden');
                 document.getElementById('scheme-picker').classList.add('hidden');
             }
-            selectForTeam(idx) {
+            // New function for battle team selection (closes modal properly)
+            selectForBattleTeam(idx) {
                 const m = this.savedMokis[idx];
                 this.myTeam[this.currentPickerSlot-1] = m;
                 this.updateBattleSlot(this.currentPickerSlot, m);
@@ -1125,7 +1126,7 @@
                 this.showToast('📥 Downloaded');
             }
 
-            // CONTEST MODE
+            // ===== CONTEST MODE =====
             selectForContest(idx) {
                 const m = this.savedMokis[idx];
                 for (let i=1;i<=4;i++) if (!this.contestLineup[i]) { this.contestLineup[i]=m; this.updateContestSlot(i,m); this.updateSynergy(); break; }
@@ -1195,7 +1196,7 @@
                 document.getElementById('scheme-picker').classList.add('hidden');
             }
 
-            // SYNERGY + RECOMMENDATION + mXP with custom contest inputs
+            // SYNERGY + RECOMMENDATION + mXP
             updateSynergy() {
                 const mokis = [1,2,3,4].map(i=>this.contestLineup[i]).filter(m=>m);
                 if (mokis.length<4) {
@@ -1293,7 +1294,6 @@
                 const entryMXP = Math.round(0.5 * entryFee);
                 
                 // Estimate rank percentile from normalized score
-                // Score 1000 → top 1%, score 0 → bottom 1%
                 const percentile = 100 - (normalized / 10); // e.g., 900 → top 10%
                 let prizeShare = 0;
                 if (percentile <= 10) prizeShare = 0.5;      // top 10% get 50% of pool
@@ -1301,7 +1301,6 @@
                 else if (percentile <= 50) prizeShare = 0.15; // next 25% get 15%
                 else prizeShare = 0.1;                        // bottom 50% get 10% (small share)
                 
-                // Adjust for number of entries – more entries means harder to get top ranks, but we keep it simple
                 const winnings = prizeShare * prizePool;
                 const perfMXP = Math.round((2/3) * winnings);
                 const totalMXP = entryMXP + perfMXP;
@@ -1310,7 +1309,7 @@
                 document.getElementById('perf-mxp').innerText = perfMXP;
                 document.getElementById('total-mxp').innerText = totalMXP;
 
-                // Rank projection based on totalMXP relative to entry fee (rough)
+                // Rank projection based on totalMXP relative to entry fee
                 if (totalMXP > entryFee * 2.5) document.getElementById('est-rank').innerText = 'TOP 10%';
                 else if (totalMXP > entryFee * 1.8) document.getElementById('est-rank').innerText = 'TOP 25%';
                 else if (totalMXP > entryFee * 1.2) document.getElementById('est-rank').innerText = 'TOP 50%';
