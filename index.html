@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>MOKU GRAND ARENA TERMINAL – FINAL WORKING</title>
+    <title>MOKU GRAND ARENA TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -623,9 +623,8 @@
         <!-- Command center -->
         <div class="command-center">
             <div id="terminal-output" class="terminal-output">
-                <div>> MOKU TERMINAL v18.0 – FINAL WORKING</div>
+                <div>> MOKU TERMINAL</div>
                 <div>> TYPE 'help' FOR COMMANDS</div>
-                <div>> 🔥 Battle mode fixed • Custom contest inputs • All schemes recommended</div>
             </div>
             <div class="command-input">
                 <span class="command-prompt">⤚</span>
@@ -670,7 +669,7 @@
                 <div class="section-title" style="margin-bottom:0;">
                     <div class="accent" style="background:var(--moku-gold);"></div>
                     <span>🏆 CHAMPION LEADERBOARD (TOP 20)</span>
-                    <span class="tooltip">ⓘ<span class="tooltip-text">Current top‑performing Moki. Click any Champion to analyze vs your lineup.</span></span>
+                    <span class="tooltip">ⓘ<span class="tooltip-text">Current top‑performing Moki.</span></span>
                 </div>
                 <button id="leaderboard-toggle" class="toggle-btn" onclick="app.toggleLeaderboard()">
                     <span class="arrow">▼</span> CLOSE
@@ -679,9 +678,6 @@
             
             <div id="leaderboard-content">
                 <div class="champion-grid" id="champion-grid"></div>
-                <div class="text-center" style="font-size:11px; color:#888; margin-top:12px;">
-                    💡 Click any Champion to analyze vs your lineup
-                </div>
             </div>
         </div>
 
@@ -691,7 +687,7 @@
             <button id="mode-contest" onclick="app.setMode('contest')">🏆 CONTEST</button>
         </div>
 
-        <!-- CLASSIC BATTLE MODE (fixed) -->
+        <!-- CLASSIC BATTLE MODE-->
         <div id="classic-mode">
             <div class="glass-panel">
                 <div class="section-title"><div class="accent" style="background:var(--moku-cyan);"></div><span>⚔️ 3V3 BATTLE</span></div>
